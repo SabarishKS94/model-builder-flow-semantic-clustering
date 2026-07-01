@@ -1401,21 +1401,21 @@
     gap: 6px;
     padding: 4px 10px;
     border-radius: 999px;
-    background: var(--slds-g-color-accent-container-1, #eef4ff);
-    color: var(--slds-g-color-accent-3, #022ac0);
+    background: #eef4ff;
+    color: #022ac0;
     font-size: 12px;
     font-weight: 700;
-    border: 1px solid var(--slds-g-color-border-accent-2, #bcd0fb);
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-accent-3, #022ac0);
-    --slds-c-icon-color-foreground: var(--slds-g-color-accent-3, #022ac0);
+    border: 1px solid #bcd0fb;
+    --slds-c-icon-color-foreground-default: #022ac0;
+    --slds-c-icon-color-foreground: #022ac0;
 }
 
 .semantic-budget_full {
-    background: var(--slds-g-color-warning-container-1, #fef5e7);
-    color: var(--slds-g-color-warning-2, #8a4600);
-    border-color: var(--slds-g-color-border-warning-2, #fbcc8c);
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-warning-2, #8a4600);
-    --slds-c-icon-color-foreground: var(--slds-g-color-warning-2, #8a4600);
+    background: #fef5e7;
+    color: #8a4600;
+    border-color: #fbcc8c;
+    --slds-c-icon-color-foreground-default: #8a4600;
+    --slds-c-icon-color-foreground: #8a4600;
 }
 
 .semantic-budget-icon {
