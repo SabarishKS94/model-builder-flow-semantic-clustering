@@ -1,5 +1,5 @@
 <template>
-    <div class="builder-shell">
+    <div class={shellClass}>
         <!-- Dark Header Bar -->
         <div class="builder-header-nav">
             <div class="nav-item nav-item_back">
@@ -420,17 +420,28 @@
                     <div class="center-header center-header_prepare">
                         <h2 class="center-title">
                             <span class="center-title_bold">{labels.PrepareVariablesTitleBold}</span>
-                            <span class="center-title_thin">{labels.PrepareVariablesTitleRest}</span>
+                            <span class="center-title_thin">{prepareTitleRest}</span>
                         </h2>
                     </div>
                     <div class="prepare-toolbar">
                         <div class="prepare-toolbar-left">
                             <lightning-button label={labels.ShowOnlySelected} variant={showOnlySelectedVariant} onclick={handleToggleShowOnlySelected}></lightning-button>
                             <span class="prepare-summary">{selectedSummary}</span>
-                            <span class={semanticBudgetClass} title={semanticBudgetText}>
-                                <lightning-icon icon-name="utility:magicwand" size="xx-small" class="semantic-budget-icon"></lightning-icon>
-                                <span class="semantic-budget-text">{semanticBudgetText}</span>
-                            </span>
+                            <template lwc:if={isV2}>
+                                <span class={budgetDotsWrapClass} title={budgetDotsLabel}>
+                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="semantic-budget-icon"></lightning-icon>
+                                    <span class="budget-dots-text">{budgetDotsLabel}</span>
+                                    <template for:each={semanticBudgetDots} for:item="dot">
+                                        <span key={dot.id} class={dot.dotClass}></span>
+                                    </template>
+                                </span>
+                            </template>
+                            <template lwc:else>
+                                <span class={semanticBudgetClass} title={semanticBudgetText}>
+                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="semantic-budget-icon"></lightning-icon>
+                                    <span class="semantic-budget-text">{semanticBudgetText}</span>
+                                </span>
+                            </template>
                         </div>
                         <div class="prepare-toolbar-right">
                             <lightning-input
@@ -443,6 +454,48 @@
                             ></lightning-input>
                         </div>
                     </div>
+                    <template lwc:if={isV4}>
+                        <div class="v4-banner" role="region" aria-label="Semantic grouping">
+                            <div class="v4-banner-icon">
+                                <lightning-icon icon-name="utility:einstein" size="small"></lightning-icon>
+                            </div>
+                            <div class="v4-banner-content">
+                                <div class="v4-banner-heading-row">
+                                    <span class="v4-banner-heading">{v4BannerHeading}</span>
+                                    <span class="v4-banner-new-pill">{labels.SemanticModeToggleNewPill}</span>
+                                    <lightning-helptext content={v4BannerHelptext} icon-name="utility:info" class="v4-banner-helptext"></lightning-helptext>
+                                </div>
+                                <p class="v4-banner-body">{v4BannerBody}</p>
+                            </div>
+                            <label class="slds-checkbox_toggle v4-banner-toggle" aria-label={v4BannerToggleLabel}>
+                                <input type="checkbox" checked={semanticMode} onchange={handleSemanticModeToggle} />
+                                <span class="slds-checkbox_faux_container">
+                                    <span class="slds-checkbox_faux"></span>
+                                    <span class="slds-checkbox_on"></span>
+                                    <span class="slds-checkbox_off"></span>
+                                </span>
+                            </label>
+                        </div>
+                    </template>
+                    <template lwc:if={showRecoBanner}>
+                        <div class="reco-banner" role="region" aria-label="Einstein recommendations">
+                            <div class="reco-banner-icon">
+                                <lightning-icon icon-name="utility:einstein" size="small"></lightning-icon>
+                            </div>
+                            <div class="reco-banner-content">
+                                <p class="reco-banner-heading">{recoBannerHeadingText}</p>
+                                <p class="reco-banner-body">{recoBannerBodyText}</p>
+                                <p class="reco-banner-vars">{recoBannerVariables}</p>
+                            </div>
+                            <div class="reco-banner-actions">
+                                <lightning-button label={recoBannerApplyLabel} variant="brand" onclick={handleRecoApplyAll}></lightning-button>
+                                <template lwc:if={showRecoReviewButton}>
+                                    <lightning-button label={labels.RecoBannerReview} variant="neutral" onclick={handleRecoReviewEach}></lightning-button>
+                                </template>
+                                <lightning-button-icon icon-name="utility:close" variant="bare" size="small" alternative-text="Dismiss" onclick={handleRecoDismiss}></lightning-button-icon>
+                            </div>
+                        </div>
+                    </template>
                     <div class="prepare-card">
                         <template lwc:if={accountSectionOpen}>
                             <div class="var-table">
@@ -464,14 +517,31 @@
                                         <div class="var-cell var-cell_variable">
                                             <lightning-icon icon-name={v.iconName} size="xx-small" variant="bare" class="var-type-icon"></lightning-icon>
                                             <a href="#" class="var-name" data-id={v.id} onclick={handleVariableNameClick}>{v.name}</a>
+                                            <template lwc:if={v.showLongTextPill}>
+                                                <lightning-badge label={labels.LongTextPillLabel} class="var-long-text-badge"></lightning-badge>
+                                            </template>
                                             <template lwc:if={v.showLargeTextInfo}>
                                                 <lightning-helptext content={labels.LargeTextInfoTooltip} icon-name="utility:info" class="var-large-text-info"></lightning-helptext>
                                             </template>
+                                            <template lwc:if={v.showAppliedBadge}>
+                                                <span class="var-applied-badge">
+                                                    <lightning-icon icon-name="utility:check" size="xx-small" class="var-applied-icon"></lightning-icon>
+                                                    <span>{labels.RecoAppliedBadgeLabel}</span>
+                                                </span>
+                                            </template>
                                         </div>
                                         <div class="var-cell var-cell_settings">
-                                            <template lwc:if={v.action}>
+                                            <template lwc:if={v.showLockText}>
+                                                <span class="var-locked-text">
+                                                    <span>{v.lockedReason}</span>
+                                                    <template lwc:if={v.showLockedTooltip}>
+                                                        <lightning-helptext content={v.lockedTooltip} icon-name="utility:info" class="var-locked-helptext"></lightning-helptext>
+                                                    </template>
+                                                </span>
+                                            </template>
+                                            <template lwc:elseif={v.action}>
                                                 <lightning-button-group class="var-action-group">
-                                                    <lightning-button label={v.actionLabel} variant={v.actionVariant} data-id={v.id} onclick={handleVariableNameClick} title={autoAppliedTooltip}></lightning-button>
+                                                    <lightning-button label={v.actionLabel} variant={v.actionVariant} data-id={v.id} onclick={handleVariableNameClick}></lightning-button>
                                                     <template lwc:if={v.showDelete}>
                                                         <lightning-button-icon icon-name="utility:delete" variant="border-filled" size="medium" alternative-text="Remove" data-id={v.id} onclick={handleRemoveVariable}></lightning-button-icon>
                                                     </template>
@@ -497,13 +567,32 @@
             <template lwc:if={showRightPanelContent}>
                 <template lwc:if={isVariablePanelOpen}>
                     <div class="builder-panel builder-panel_variable">
-                        <div class="var-panel-header">
-                            <h3 class="var-panel-title">{activeVariable.name}</h3>
-                            <lightning-button-icon icon-name="utility:close" variant="bare" size="small" alternative-text="Close panel" onclick={handleCloseVariablePanel}></lightning-button-icon>
+                        <div class="var-panel-header var-panel-header_picker">
+                            <span class="var-panel-header-label">Variable</span>
+                            <div class="variant-picker">
+                                <button type="button" class="variant-picker-btn" onclick={handleToggleVariantPicker} aria-haspopup="listbox" aria-expanded={variantPickerOpen}>
+                                    <span class="variant-picker-btn-label">{variantPickerButtonLabel}</span>
+                                    <lightning-icon icon-name="utility:down" size="xx-small" variant="bare" class="variant-picker-btn-icon"></lightning-icon>
+                                </button>
+                                <template lwc:if={variantPickerOpen}>
+                                    <div class="variant-picker-dropdown">
+                                        <div class="variant-picker-search">
+                                            <lightning-input variant="label-hidden" type="search" placeholder="Search variables..." value={variantPickerSearch} onchange={handleVariantPickerSearch}></lightning-input>
+                                        </div>
+                                        <div class="variant-picker-list" role="listbox">
+                                            <template for:each={variantPickerOptions} for:item="opt">
+                                                <button type="button" key={opt.id} class={opt.itemClass} data-id={opt.id} onclick={handleVariantPickerSelect} role="option" disabled={opt.disabled} aria-disabled={opt.disabled}>
+                                                    {opt.name}
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
                         </div>
                         <div class="var-panel-tabs">
-                            <div class="var-panel-tab">{labels.AlertsTab}</div>
                             <div class="var-panel-tab var-panel-tab_active">{labels.SettingsTab}</div>
+                            <div class="var-panel-tab">{labels.AlertsTab}</div>
                         </div>
                         <div class="var-panel-body">
                             <div class="var-panel-field">
@@ -513,28 +602,85 @@
                                         <lightning-icon icon-name="utility:info" size="xx-small" variant="inverse"></lightning-icon>
                                     </span>
                                 </div>
-                                <template lwc:if={isAutoApplied}>
-                                    <div class="auto-applied-notice" role="status">
-                                        <lightning-icon icon-name="utility:magicwand" size="x-small" class="auto-applied-icon"></lightning-icon>
-                                        <p class="auto-applied-text">{autoAppliedTooltip}</p>
-                                        <lightning-helptext content={labels.LargeTextInfoTooltip} icon-name="utility:info" class="auto-applied-helptext"></lightning-helptext>
+                                <template lwc:if={showCompareCards}>
+                                    <div class="compare-cards">
+                                        <button type="button" class={compareTextCardClass} onclick={handleSelectCompareText}>
+                                            <span class="compare-card-head">
+                                                <span class={compareTextRadioIconClass}></span>
+                                                <span class="compare-card-title">{labels.CompareTextTitle}</span>
+                                            </span>
+                                            <p class="compare-card-desc">{labels.CompareTextDesc}</p>
+                                            <p class="compare-card-best">{labels.CompareTextBest}</p>
+                                            <div class="compare-preview">
+                                                <p class="compare-preview-title">{labels.ComparePreviewTextTitle}</p>
+                                                <template for:each={compareTextPreview} for:item="p">
+                                                    <div key={p.id} class="compare-preview-row">
+                                                        <span class="compare-preview-label">{p.label}</span>
+                                                        <span class="compare-preview-count">{p.count}</span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                        </button>
+                                        <button type="button" class={compareSemanticCardClass} onclick={handleSelectCompareSemantic} disabled={compareSemanticLocked}>
+                                            <span class="compare-card-tag">{labels.CompareRecommendedTag}</span>
+                                            <span class="compare-card-head">
+                                                <span class={compareSemanticRadioIconClass}></span>
+                                                <span class="compare-card-title">{labels.CompareSemanticTitle}</span>
+                                            </span>
+                                            <p class="compare-card-desc">{labels.CompareSemanticDesc}</p>
+                                            <p class="compare-card-best">{labels.CompareSemanticBest}</p>
+                                            <div class="compare-preview">
+                                                <p class="compare-preview-title">{labels.ComparePreviewSemanticTitle}</p>
+                                                <template for:each={compareSemanticPreview} for:item="p">
+                                                    <div key={p.id} class="compare-preview-row">
+                                                        <span class="compare-preview-label">{p.label}</span>
+                                                        <span class="compare-preview-count">{p.count}</span>
+                                                    </div>
+                                                </template>
+                                            </div>
+                                            <template lwc:if={compareSemanticLocked}>
+                                                <span class="compare-card-locked">
+                                                    <lightning-icon icon-name="utility:lock" size="xx-small"></lightning-icon>
+                                                    <span>{semanticLockedHint}</span>
+                                                </span>
+                                            </template>
+                                        </button>
                                     </div>
                                 </template>
-                                <template lwc:if={showSemanticGroupHint}>
-                                    <p class="semantic-group-hint">{semanticGroupHintText}</p>
+                                <template lwc:if={showTransformationDropdown}>
+                                    <lightning-combobox
+                                        variant="label-hidden"
+                                        value={activeTransformation}
+                                        options={transformationOptions}
+                                        onchange={handleTransformationChange}
+                                    ></lightning-combobox>
+                                    <template lwc:if={hasSemanticError}>
+                                        <div class="semantic-error" role="alert">
+                                            <lightning-icon icon-name="utility:error" size="xx-small" variant="error" class="semantic-error-icon" alternative-text="Error"></lightning-icon>
+                                            <div class="semantic-error-body">
+                                                <span class="semantic-error-title">{semanticErrorTitle}</span>
+                                                <span class="semantic-error-message">{semanticErrorMessage}</span>
+                                            </div>
+                                            <button type="button" class="semantic-error-close" onclick={handleDismissSemanticError} aria-label="Dismiss">
+                                                <lightning-icon icon-name="utility:close" size="xx-small"></lightning-icon>
+                                            </button>
+                                        </div>
+                                    </template>
+                                    <template lwc:if={isActiveSemanticLocked}>
+                                        <div class="semantic-locked-hint">
+                                            <lightning-icon icon-name="utility:lock" size="xx-small" class="semantic-locked-icon"></lightning-icon>
+                                            <span>{semanticLockedHint}</span>
+                                        </div>
+                                    </template>
                                 </template>
-                                <lightning-combobox
-                                    variant="label-hidden"
-                                    value={activeTransformation}
-                                    options={transformationOptions}
-                                    onchange={handleTransformationChange}
-                                ></lightning-combobox>
-                                <template lwc:if={isActiveSemanticLocked}>
-                                    <div class="semantic-locked-hint">
-                                        <lightning-icon icon-name="utility:lock" size="xx-small" class="semantic-locked-icon"></lightning-icon>
-                                        <span>{semanticLockedHint}</span>
-                                    </div>
-                                </template>
+                                <ui-sample-outcome
+                                    transformation={sampleOutcomeTransformation}
+                                    before-bars={semanticBeforeBars}
+                                    after-bars={semanticAfterBars}
+                                    before-caption={sampleOutcomeBeforeCaption}
+                                    after-caption={sampleOutcomeAfterCaption}
+                                    hide-risk
+                                ></ui-sample-outcome>
                             </div>
 
                             <template lwc:if={showReplaceMissingOptions}>
@@ -569,7 +715,7 @@
                             </template>
 
                             <template lwc:if={showNumberBuckets}>
-                                <div class="var-panel-field">
+                                <div class="var-panel-field var-panel-field_divided">
                                     <div class="var-panel-label-row">
                                         <span class="var-panel-label">{labels.NumberOfBucketsLabel}</span>
                                         <span class="var-panel-info-badge">
@@ -584,22 +730,33 @@
                                 </div>
                             </template>
 
-                            <template lwc:if={showTextFrequencyChart}>
+<template lwc:if={showTextFrequencyChart}>
                                 <div class="var-panel-distribution">
                                     <h4 class="var-panel-distribution-title">{labels.DistributionLabel}</h4>
                                     <div class="var-freq-chart">
-                                        <div class="var-freq-axis">
-                                            <span class="var-freq-axis-label">{labels.CountAxisLabel}</span>
-                                        </div>
-                                        <template for:each={textFrequencies} for:item="row">
-                                            <div key={row.label} class="var-freq-row">
-                                                <span class="var-freq-label">{row.label}</span>
-                                                <div class="var-freq-bar-wrap">
-                                                    <div class="var-freq-bar" style={row.barStyle}></div>
-                                                    <span class="var-freq-count">{row.count}</span>
-                                                </div>
+                                        <div class="var-freq-axis-title">{labels.CountAxisLabel}</div>
+                                        <div class="var-freq-plot">
+                                            <div class="var-freq-axis-scale">
+                                                <template for:each={textFreqTicks} for:item="t">
+                                                    <span key={t.key} class="var-freq-tick" style={t.style}>{t.label}</span>
+                                                </template>
                                             </div>
-                                        </template>
+                                            <div class="var-freq-grid">
+                                                <template for:each={textFreqTicks} for:item="t">
+                                                    <span key={t.key} class="var-freq-gridline" style={t.style}></span>
+                                                </template>
+                                            </div>
+                                            <template for:each={textFrequencies} for:item="row">
+                                                <div key={row.label} class="var-freq-row">
+                                                    <span class="var-freq-label">{row.label}</span>
+                                                    <div class="var-freq-bar-wrap">
+                                                        <div class="var-freq-bar" style={row.barStyle}>
+                                                            <span class={row.countCls}>{row.count}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
                             </template>
@@ -691,5 +848,6 @@
             </template>
         </div>
         </template>
+
     </div>
 </template>

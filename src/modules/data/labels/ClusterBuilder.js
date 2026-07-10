@@ -57,14 +57,57 @@ export const TransformationReplaceMissing = 'Replace Missing Values';
 export const TransformationTextClustering = 'Text Clustering';
 export const TransformationGroupByMonth = 'Group by Month';
 export const TransformationGroupByDay = 'Group by Day';
-export const TransformationSemanticClustering = 'Semantic Clustering';
+export const TransformationSemanticGrouping = 'Semantic Grouping';
 export const SemanticBudgetLabel = 'Semantic transformations';
 export const SemanticBudgetMax = 2;
 export const SemanticAutoBadge = 'Auto';
-export const SemanticGroupHeader = 'Semantic (2 max)';
-export const SemanticLockedHint = 'Limit reached. Remove one to enable.';
-export const AutoAppliedTooltip = 'Auto-applied because this field contains very long text. Click to change.';
-export const LargeTextInfoTooltip = 'Semantic Clustering uses an embedding model that captures meaning across long passages. Text Clustering relies on word-overlap, so it breaks down on long-form fields where the same idea is phrased many different ways.';
+export const SemanticLockedHint = 'Only 2 fields can use Semantic Grouping. Remove one to enable this variable.';
+export const SemanticLockedShort = 'Limit reached';
+export const SemanticBudgetErrorTitle = 'Semantic Grouping limit reached';
+export const SemanticBudgetErrorMessage = 'Only 2 fields can be set to Semantic Grouping at a time. Remove Semantic Grouping from another field first.';
+export const LargeTextInfoTooltip = 'Semantic Grouping uses an embedding model that captures meaning across long passages. Text Clustering relies on word-overlap, so it breaks down on long-form fields where the same idea is phrased many different ways.';
+
+// Variant chip (demo-only)
+export const VariantChipLabel = 'Variant';
+export const VariantV1Label = 'V1 · Silent auto';
+export const VariantV2Label = 'V2 · Recommendation';
+export const VariantV3Label = 'V3 · Compare';
+export const VariantV4Label = 'V4 · Semantic mode';
+
+// V4 — Semantic mode toggle + right-panel discovered clusters
+export const SemanticModeToggleTitle = 'Use semantic grouping';
+export const SemanticModeToggleNewPill = 'NEW';
+export const SemanticModeToggleBodyOff = 'Group long text fields by meaning instead of patterns.';
+export const SemanticModeToggleBodyOn = 'Only text fields are available. Choose the field(s) to discover clusters in.';
+export const PrepareVariablesTitleRestSemantic = 'for semantic grouping';
+export const LongTextPillLabel = 'Long text';
+export const DisabledInTabularMode = 'Disabled in tabular mode';
+export const DisabledInSemanticMode = 'Disabled when semantic grouping is on';
+export const RecoBannerBodyV4 = 'These fields contain long-form text. Turn on semantic grouping to group them by meaning.';
+export const RecoBannerApplyV4 = 'Turn on semantic grouping';
+
+// V2 — Recommendation banner
+export const RecoBannerHeading = 'Einstein has 2 recommendations for you';
+export const RecoBannerBody = 'These fields contain long-form text. Semantic Grouping will read meaning across sentences instead of matching individual words.';
+export const RecoBannerApply = 'Apply both';
+export const RecoBannerReview = 'Review each';
+export const RecoBannerDismiss = 'Dismiss';
+export const RecoRowBadgeLabel = 'Recommended';
+export const RecoAppliedBadgeLabel = 'Applied';
+export const BudgetDotsLabelAvailable = 'Semantic slots';
+export const BudgetDotsLabelFull = 'Semantic slots full';
+
+// V3 — Compare cards
+export const CompareHeading = 'Choose a clustering approach';
+export const CompareTextTitle = 'Text Clustering';
+export const CompareTextDesc = 'Groups records by matching keywords and phrases.';
+export const CompareTextBest = 'Best for short labels or repeated phrases.';
+export const CompareSemanticTitle = 'Semantic Grouping';
+export const CompareSemanticDesc = 'Groups records by meaning, using an embedding model.';
+export const CompareSemanticBest = 'Best for long-form text where the same idea is phrased many ways.';
+export const CompareRecommendedTag = 'Recommended for this field';
+export const ComparePreviewTextTitle = 'Preview — 4 keyword groups';
+export const ComparePreviewSemanticTitle = 'Preview — 3 meaning groups';
 export const ReplaceWithLabel = 'Replace With';
 export const GroupByLabel = 'Group By';
 export const NumberOfBucketsLabel = 'Number of Buckets';

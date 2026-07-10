@@ -1,0 +1,40 @@
+<template>
+    <section class="g-outcome">
+        <header class="g-outcome__head">
+            <h4 class="g-outcome__title">{title}</h4>
+            <p class="g-outcome__sub">{subtitle}</p>
+        </header>
+
+        <div class="g-outcome__grid">
+            <article class="g-panel">
+                <div class="g-panel__label">BEFORE</div>
+                <div class="g-panel__chart">
+                    <template for:each={resolvedBefore} for:item="b">
+                        <div key={b.id} class={b.cls} style={b.style}></div>
+                    </template>
+                </div>
+                <p class="g-panel__caption">{resolvedBeforeCaption}</p>
+            </article>
+
+            <article class="g-panel">
+                <div class="g-panel__label">AFTER</div>
+                <div class="g-panel__chart">
+                    <template for:each={resolvedAfter} for:item="b">
+                        <div key={b.id} class={b.cls} style={b.style}></div>
+                    </template>
+                </div>
+                <p class="g-panel__caption">{resolvedAfterCaption}</p>
+            </article>
+        </div>
+
+        <template lwc:if={hasRisk}>
+            <div class="skip-risk" role="note">
+                <lightning-icon icon-name="utility:warning" size="xx-small" variant="warning" alternative-text="Risk"></lightning-icon>
+                <div class="skip-risk__body">
+                    <span class="skip-risk__label">Risk if you skip this transformation</span>
+                    <p class="skip-risk__text">{resolvedRisk}</p>
+                </div>
+            </div>
+        </template>
+    </section>
+</template>

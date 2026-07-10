@@ -4,9 +4,6 @@ import { navigate } from '../../../router';
 const VERSION_DATA = {
     v1: {
         label: 'Version 1', short: 'V1', meta: 'Recommended', score: 87, scoreClass: 'score-card score-card_best',
-        quality: { silhouette: 0.62, daviesBouldin: 1.1, interpretability: 'High' },
-        structure: { clusters: 3, coverage: '98%', avgSize: '1,200' },
-        operational: { trainingSize: '12,400', drift: '0.08' },
         labels: [
             { name: 'Billing', count: 1200, css: 'bar-billing' },
             { name: 'Support', count: 1200, css: 'bar-support' },
@@ -22,9 +19,6 @@ const VERSION_DATA = {
     },
     v2: {
         label: 'Version 2 (Active)', short: 'V2', meta: 'Active', score: 78, scoreClass: 'score-card score-card_neutral',
-        quality: { silhouette: 0.71, daviesBouldin: 1.4, interpretability: 'Medium' },
-        structure: { clusters: 4, coverage: '94%', avgSize: '900' },
-        operational: { trainingSize: '18,200', drift: '—' },
         labels: [
             { name: 'Billing', count: 1100, css: 'bar-billing' },
             { name: 'Support', count: 1050, css: 'bar-support' },
@@ -41,9 +35,6 @@ const VERSION_DATA = {
     },
     v3: {
         label: 'Version 3', short: 'V3', meta: 'Inactive', score: 91, scoreClass: 'score-card score-card_best',
-        quality: { silhouette: 0.79, daviesBouldin: 0.9, interpretability: 'High' },
-        structure: { clusters: 4, coverage: '99%', avgSize: '1,350' },
-        operational: { trainingSize: '26,400', drift: '0.04' },
         labels: [
             { name: 'Billing', count: 1350, css: 'bar-billing' },
             { name: 'Support', count: 1280, css: 'bar-support' },
@@ -60,9 +51,6 @@ const VERSION_DATA = {
     },
     v4: {
         label: 'Version 4', short: 'V4', meta: 'Failed', score: 41, scoreClass: 'score-card score-card_worst',
-        quality: { silhouette: 0.38, daviesBouldin: 2.1, interpretability: 'Low' },
-        structure: { clusters: 8, coverage: '76%', avgSize: '420' },
-        operational: { trainingSize: '9,800', drift: '0.29' },
         labels: [
             { name: 'Billing', count: 620, css: 'bar-billing' },
             { name: 'Support', count: 580, css: 'bar-support' },
@@ -81,9 +69,6 @@ const VERSION_DATA = {
     },
     v5: {
         label: 'Version 5 (New)', short: 'V5', meta: 'New', score: 64, scoreClass: 'score-card score-card_worst',
-        quality: { silhouette: 0.68, daviesBouldin: 1.2, interpretability: 'Medium' },
-        structure: { clusters: 6, coverage: '91%', avgSize: '720' },
-        operational: { trainingSize: '22,000', drift: '0.14' },
         labels: [
             { name: 'Billing', count: 1050, css: 'bar-billing' },
             { name: 'Support', count: 1000, css: 'bar-support' },
@@ -159,98 +144,6 @@ export default class CompareVersions extends LightningElement {
             return `${best.short} has the highest overall score (${best.score}) among the selected versions. Consider activating it.`;
         }
         return `Your active version (${active.short}) has the best overall score (${active.score}) among the selected versions.`;
-    }
-
-    _buildCell(val, bold, highlight, key) {
-        let cellClass = 'slds-text-align_right';
-        if (bold) cellClass += ' slds-text-title_bold';
-        if (highlight) cellClass += ' cell-highlight';
-        return { key, val, cellClass };
-    }
-
-    get qualityTableRows() {
-        const versions = this.selectedVersions;
-        const sil = versions.map(v => v.quality.silhouette);
-        const db = versions.map(v => v.quality.daviesBouldin);
-        const interp = versions.map(v => v.quality.interpretability);
-        const bestSil = Math.max(...sil);
-        const bestDb = Math.min(...db);
-        const interpRank = { High: 3, Medium: 2, Low: 1 };
-        const bestInterp = Math.max(...interp.map(i => interpRank[i] || 0));
-        const bestInterpIdx = interp.findIndex(i => (interpRank[i] || 0) === bestInterp);
-
-        return [
-            {
-                key: 'silhouette', metric: 'Silhouette score (↑ better)',
-                values: versions.map((v, i) => this._buildCell(sil[i].toString(), sil[i] === bestSil, sil[i] === bestSil, `sil-${v.short}`)),
-                winner: versions[sil.indexOf(bestSil)].short
-            },
-            {
-                key: 'davies', metric: 'Davies-Bouldin index (↓ better)',
-                values: versions.map((v, i) => this._buildCell(db[i].toString(), db[i] === bestDb, db[i] === bestDb, `db-${v.short}`)),
-                winner: versions[db.indexOf(bestDb)].short
-            },
-            {
-                key: 'interp', metric: 'Label interpretability',
-                values: versions.map((v, i) => this._buildCell(interp[i], i === bestInterpIdx, i === bestInterpIdx, `interp-${v.short}`)),
-                winner: versions[bestInterpIdx].short
-            }
-        ];
-    }
-
-    get structureTableRows() {
-        const versions = this.selectedVersions;
-        const coverageNums = versions.map(v => parseInt(v.structure.coverage));
-        const bestCoverage = Math.max(...coverageNums);
-        const bestCoverageIdx = coverageNums.indexOf(bestCoverage);
-
-        return [
-            {
-                key: 'clusters', metric: '# of clusters',
-                values: versions.map(v => this._buildCell(v.structure.clusters.toString(), false, false, `clust-${v.short}`)),
-                winner: '—'
-            },
-            {
-                key: 'coverage', metric: 'Coverage (% labeled)',
-                values: versions.map((v, i) => this._buildCell(v.structure.coverage, i === bestCoverageIdx, i === bestCoverageIdx, `cov-${v.short}`)),
-                winner: versions[bestCoverageIdx].short
-            },
-            {
-                key: 'avgsize', metric: 'Avg cluster size',
-                values: versions.map(v => this._buildCell(v.structure.avgSize, false, false, `avg-${v.short}`)),
-                winner: '—'
-            }
-        ];
-    }
-
-    get operationalTableRows() {
-        const versions = this.selectedVersions;
-        const trainNums = versions.map(v => parseInt(v.operational.trainingSize.replace(/,/g, '')));
-        const bestTrain = Math.max(...trainNums);
-        const bestTrainIdx = trainNums.indexOf(bestTrain);
-
-        return [
-            {
-                key: 'trainsize', metric: 'Training set size',
-                values: versions.map((v, i) => this._buildCell(v.operational.trainingSize, i === bestTrainIdx, i === bestTrainIdx, `train-${v.short}`)),
-                winner: versions[bestTrainIdx].short
-            },
-            {
-                key: 'drift', metric: 'Drift vs Active',
-                values: versions.map(v => this._buildCell(v.operational.drift, false, false, `drift-${v.short}`)),
-                winner: '—'
-            }
-        ];
-    }
-
-    get tableHeaderVersions() {
-        const versions = this.selectedVersions;
-        const maxScore = Math.max(...versions.map(v => v.score));
-        return versions.map(v => ({
-            key: v.short,
-            label: v.score === maxScore ? `${v.short} (Recommended)` : `${v.short} (${v.meta})`,
-            isRecommended: v.score === maxScore
-        }));
     }
 
     get labelChartRows() {

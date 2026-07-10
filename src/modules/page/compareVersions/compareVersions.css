@@ -199,44 +199,6 @@
     border-color: #fce4ec;
 }
 
-/* Comparison Tables */
-.comparison-section {
-    margin-bottom: 2rem;
-}
-
-.subsection {
-    margin-bottom: 1.25rem;
-}
-
-.subsection-title {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #181818;
-    margin: 0 0 0.5rem;
-}
-
-table.slds-table {
-    border-radius: 0.5rem;
-    overflow: hidden;
-    border: 1px solid var(--slds-g-color-border-1, #c9c9c9);
-    table-layout: fixed;
-    width: 100%;
-}
-
-table.slds-table th:nth-child(1) { width: 22%; }
-table.slds-table th:nth-child(2) { width: 22%; }
-table.slds-table th:nth-child(3) { width: 22%; }
-table.slds-table th:nth-child(4) { width: 22%; }
-table.slds-table th:nth-child(5) { width: 12%; }
-
-.slds-text-title_bold {
-    font-weight: 700;
-}
-
-.cell-highlight {
-    background: #ebfaf6;
-}
-
 /* Nested Card */
 .nested-card {
     border: 1px solid var(--slds-g-color-border-1, #c9c9c9);

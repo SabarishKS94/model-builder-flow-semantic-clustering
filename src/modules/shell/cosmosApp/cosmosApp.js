@@ -332,8 +332,20 @@ export default class CosmosApp extends LightningElement {
     }
 
     _promptForApiKeyIfNeeded() {
+        if (this._isShelfMode()) return;
         if (!hasApiKey()) {
             this._openApiKeyModal();
+        }
+    }
+
+    _isShelfMode() {
+        try {
+            const hash = window.location.hash || '';
+            const qs = hash.indexOf('?');
+            const search = qs >= 0 ? hash.slice(qs) : window.location.search;
+            return new URLSearchParams(search).get('mode') === 'shelf';
+        } catch (e) {
+            return false;
         }
     }
 
