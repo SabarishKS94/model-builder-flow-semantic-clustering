@@ -197,9 +197,15 @@ export default class ClusterBuilder extends LightningElement {
         const urlMode = params && params.get('mode');
         this.shelfMode = urlMode === 'shelf';
         this.applyVariantPreset(DEFAULT_VARIANT);
+        let targetStep = null;
         if (!isNaN(urlStep) && urlStep >= 1 && urlStep <= 5) {
-            this.currentStep = urlStep;
-            if (urlStep >= 2) {
+            targetStep = urlStep;
+        } else if (this.shelfMode) {
+            targetStep = 3;
+        }
+        if (targetStep) {
+            this.currentStep = targetStep;
+            if (targetStep >= 2) {
                 this.selectedDmo = DATA_MODEL_OBJECTS.find((d) => d.id === 'dmo-1') || null;
             }
         }
