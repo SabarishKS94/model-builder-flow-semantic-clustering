@@ -598,6 +598,11 @@ export default class ClusterBuilder extends LightningElement {
             this.autoAppliedSemantic = auto;
             this.pendingRecos = new Set();
             this.recoBannerDismissed = true;
+            const activeIsLargeText = this.activeVariableId
+                && (ACCOUNT_VARIABLES.find((v) => v.id === this.activeVariableId) || {}).isLargeText;
+            if (!activeIsLargeText) {
+                this.activeVariableId = LARGE_TEXT_IDS[0] || null;
+            }
         } else {
             const trans = { ...this.variableTransformations };
             const actions = { ...this.variableActions };
@@ -871,7 +876,7 @@ applyTransformationToActive(value) {
 
     get isActiveSemanticLocked() {
         const v = this.activeVariable;
-        if (!v || v.type !== 'text') return false;
+        if (!v || v.type !== 'text' || !v.isLargeText) return false;
         const current = this.activeTransformation;
         return this.semanticBudgetReached && current !== 'semantic-grouping';
     }
