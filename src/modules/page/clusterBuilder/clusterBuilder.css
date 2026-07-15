@@ -2092,101 +2092,72 @@
     pointer-events: auto;
 }
 
-/* ---------- V4: Merged Einstein + Semantic-mode banner ---------- */
-.v4-banner {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 14px 16px;
+/* ---------- V4: Semantic grouping scoped notification ---------- */
+.sg-scoped-notification {
     margin: 0 24px 16px;
-    background: #eef4ff;
-    border: 1px solid #bcd0fb;
-    border-left: 4px solid #0250d9;
-    border-radius: 8px;
-    box-sizing: border-box;
 }
 
-.v4-banner-icon {
-    flex: 0 0 32px;
-    width: 32px;
-    height: 32px;
-    border-radius: 999px;
-    background: #ffffff;
-    border: 1px solid #bcd0fb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    --slds-c-icon-color-foreground-default: #0250d9;
-    --slds-c-icon-color-foreground: #0250d9;
+.sg-scoped-notification__icon {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-info-1, #0b5cab);
+    --slds-c-icon-color-foreground: var(--slds-g-color-on-info-1, #0b5cab);
 }
 
-.v4-banner-content {
-    flex: 1 1 auto;
-    min-width: 0;
-}
-
-.v4-banner-heading-row {
+.sg-scoped-notification__body {
     display: flex;
     align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    margin-bottom: 2px;
+    color: var(--slds-g-color-on-info-1, #0b5cab);
 }
 
-.v4-banner-heading {
-    color: #022ac0;
-    font-weight: 700;
-    font-size: 14px;
-    white-space: normal;
+.sg-scoped-notification__text {
+    font-weight: 600;
+    font-size: 13px;
+    line-height: 18px;
 }
 
-.v4-banner-new-pill {
-    background: #2e844a;
-    color: #ffffff;
-    font-size: 10px;
+.sg-scoped-notification__new {
+    --sds-c-badge-color-background: #2e844a;
+    --sds-c-badge-text-color: #ffffff;
+    --sds-c-badge-radius-border: 4px;
     font-weight: 700;
     letter-spacing: 0.06em;
-    padding: 2px 7px;
-    border-radius: 4px;
     text-transform: uppercase;
-    flex-shrink: 0;
 }
 
-.v4-banner-helptext {
-    --slds-c-icon-color-foreground-default: #022ac0;
-    --slds-c-icon-color-foreground: #022ac0;
+.sg-scoped-notification__helptext {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-info-1, #0b5cab);
+    --slds-c-icon-color-foreground: var(--slds-g-color-on-info-1, #0b5cab);
 }
 
-.v4-banner-body {
-    color: #181818;
-    font-size: 13px;
-    margin: 0 0 4px 0;
-    line-height: 1.4;
-}
-
-.v4-banner-vars {
-    color: #444;
-    font-size: 12px;
-    margin: 0;
-    font-style: italic;
-}
-
-.v4-banner-toggle {
-    flex: 0 0 auto;
-    width: auto;
+.sg-scoped-notification__control {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
     margin-left: 12px;
+    flex: 0 0 auto;
+}
+
+.sg-toggle {
     display: inline-flex;
     align-items: center;
 }
 
-.v4-banner-toggle .slds-checkbox_faux_container {
+.sg-toggle .slds-checkbox_faux_container {
     display: inline-flex;
     align-items: center;
 }
 
-.v4-banner-toggle .slds-checkbox_on,
-.v4-banner-toggle .slds-checkbox_off {
+.sg-toggle .slds-checkbox_on,
+.sg-toggle .slds-checkbox_off {
     display: none !important;
+}
+
+.sg-toggle__state {
+    font-size: 10px;
+    line-height: 14px;
+    color: var(--slds-g-color-on-surface-1, #5c5c5c);
 }
 
 /* ---------- V4: Long-text badge ---------- */

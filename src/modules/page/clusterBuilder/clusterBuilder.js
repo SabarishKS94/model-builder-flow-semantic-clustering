@@ -569,6 +569,10 @@ export default class ClusterBuilder extends LightningElement {
         return this.semanticMode ? 'Semantic grouping on' : 'Turn on semantic grouping';
     }
 
+    get semanticStateLabel() {
+        return this.semanticMode ? 'Active' : 'Inactive';
+    }
+
     handleSemanticModeToggle(event) {
         const on = !!event.target.checked;
         this.semanticMode = on;
