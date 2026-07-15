@@ -573,6 +573,14 @@ export default class ClusterBuilder extends LightningElement {
         return this.semanticMode ? 'Active' : 'Inactive';
     }
 
+    get semanticStateLabelOn() {
+        return 'Active';
+    }
+
+    get semanticStateLabelOff() {
+        return 'Inactive';
+    }
+
     handleSemanticModeToggle(event) {
         const on = !!event.target.checked;
         this.semanticMode = on;

@@ -455,25 +455,29 @@
                         </div>
                     </div>
                     <template lwc:if={isV4}>
-                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_info sg-scoped-notification" role="region" aria-label="Semantic grouping">
+                        <div class="slds-scoped-notification slds-media auto-cluster-bar sg-scoped-notification" role="region" aria-label="Semantic grouping">
                             <div class="slds-media__figure">
-                                <lightning-icon icon-name="utility:magicwand" size="small" alternative-text="Semantic grouping" class="sg-scoped-notification__icon"></lightning-icon>
+                                <lightning-icon icon-name="utility:magicwand" size="small" alternative-text="Semantic grouping" class="auto-cluster-icon"></lightning-icon>
                             </div>
                             <div class="slds-media__body sg-scoped-notification__body">
-                                <span class="sg-scoped-notification__text">{v4BannerHeading}</span>
-                                <lightning-badge label={labels.SemanticModeToggleNewPill} class="sg-scoped-notification__new"></lightning-badge>
-                                <lightning-helptext content={v4BannerHelptext} icon-name="utility:info" class="sg-scoped-notification__helptext"></lightning-helptext>
+                                <div class="sg-scoped-notification__title-row">
+                                    <span class="auto-cluster-text">{v4BannerHeading}</span>
+                                    <lightning-badge label={labels.SemanticModeToggleNewPill} class="sg-scoped-notification__new"></lightning-badge>
+                                    <lightning-helptext content={v4BannerHelptext} icon-name="utility:info"></lightning-helptext>
+                                </div>
+                                <p class="sg-scoped-notification__subtext">{v4BannerBody}</p>
                             </div>
-                            <div class="sg-scoped-notification__control">
-                                <label class="slds-checkbox_toggle sg-toggle" aria-label={v4BannerToggleLabel}>
-                                    <input type="checkbox" checked={semanticMode} onchange={handleSemanticModeToggle} />
-                                    <span class="slds-checkbox_faux_container">
-                                        <span class="slds-checkbox_faux"></span>
-                                        <span class="slds-checkbox_on"></span>
-                                        <span class="slds-checkbox_off"></span>
-                                    </span>
-                                </label>
-                                <span class="sg-toggle__state">{semanticStateLabel}</span>
+                            <div class="slds-media__figure slds-media__figure_reverse">
+                                <div class="auto-cluster-toggle-wrap">
+                                    <label class="slds-checkbox_toggle" aria-label={v4BannerToggleLabel}>
+                                        <input type="checkbox" checked={semanticMode} onchange={handleSemanticModeToggle} />
+                                        <span class="slds-checkbox_faux_container">
+                                            <span class="slds-checkbox_faux"></span>
+                                            <span class="slds-checkbox_on">{semanticStateLabelOn}</span>
+                                            <span class="slds-checkbox_off">{semanticStateLabelOff}</span>
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </template>
