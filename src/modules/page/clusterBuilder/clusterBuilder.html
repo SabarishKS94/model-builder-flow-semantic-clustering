@@ -437,27 +437,7 @@
                                 </span>
                             </template>
                             <template lwc:else>
-                                <span class={semanticBudgetClass} title={semanticBudgetText}>
-                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="semantic-budget-icon"></lightning-icon>
-                                    <span class="semantic-budget-text">{semanticBudgetText}</span>
-                                </span>
-                                <span class="sg-variant-label">Variant 1 · Badge</span>
                                 <lightning-badge label={semanticBudgetShortText} icon-name="utility:magicwand" variant={semanticBudgetBadgeVariant} class="sg-badge-variant"></lightning-badge>
-                                <span class="sg-variant-label">Variant 2 · Meter</span>
-                                <span class={semanticBudgetMeterClass} title={semanticBudgetText}>
-                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="sg-meter-icon"></lightning-icon>
-                                    <span class="sg-meter-label">Semantic transformations</span>
-                                    <span class="sg-meter-track" aria-hidden="true">
-                                        <span class="sg-meter-fill" style={semanticBudgetMeterFillStyle}></span>
-                                    </span>
-                                    <span class="sg-meter-count">{semanticUsedCount} <span class="sg-meter-count-max">/ {semanticBudgetMax}</span></span>
-                                </span>
-                                <span class="sg-variant-label">Variant 3 · Token</span>
-                                <span class={semanticBudgetTokenClass} title={semanticBudgetText}>
-                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="sg-token-icon"></lightning-icon>
-                                    <span class="sg-token-text">Semantic transformations</span>
-                                    <span class="sg-token-count">{semanticUsedCount}/{semanticBudgetMax}</span>
-                                </span>
                             </template>
                         </div>
                         <div class="prepare-toolbar-right">
