@@ -855,14 +855,13 @@ applyTransformationToActive(value) {
         if (v.type === 'text') {
             const currentValue = this.activeTransformation;
             const semanticLocked = this.semanticBudgetReached && currentValue !== 'semantic-grouping';
-            const options = [
-                { label: Labels.TransformationNone, value: 'none' },
-                {
+            const options = [{ label: Labels.TransformationNone, value: 'none' }];
+            if (!v.isLargeText) {
+                options.push({
                     label: Labels.TransformationTextClustering,
                     value: 'text-clustering',
-                },
-            ];
-            if (v.isLargeText) {
+                });
+            } else {
                 options.push({
                     label: semanticLocked
                         ? `${Labels.TransformationSemanticGrouping} (Limit reached)`
