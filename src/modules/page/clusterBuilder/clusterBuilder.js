@@ -379,6 +379,35 @@ export default class ClusterBuilder extends LightningElement {
             : 'semantic-budget';
     }
 
+    get semanticBudgetBadgeVariant() {
+        return this.semanticBudgetReached ? 'warning' : 'inverse';
+    }
+
+    get semanticBudgetShortText() {
+        return `Semantic transformations · ${this.semanticUsedCount} of ${this.semanticBudgetMax}`;
+    }
+
+    get semanticBudgetPercent() {
+        const max = this.semanticBudgetMax || 1;
+        return Math.min(100, Math.round((this.semanticUsedCount / max) * 100));
+    }
+
+    get semanticBudgetMeterFillStyle() {
+        return `width: ${this.semanticBudgetPercent}%;`;
+    }
+
+    get semanticBudgetMeterClass() {
+        return this.semanticBudgetReached
+            ? 'sg-meter sg-meter_full'
+            : 'sg-meter';
+    }
+
+    get semanticBudgetTokenClass() {
+        return this.semanticBudgetReached
+            ? 'sg-token sg-token_full'
+            : 'sg-token';
+    }
+
     // V2 — Recommendation banner (V4 has its own merged banner)
     get showRecoBanner() {
         if (this.recoBannerDismissed || this.pendingRecos.size === 0) return false;
