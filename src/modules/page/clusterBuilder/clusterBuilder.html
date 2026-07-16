@@ -571,28 +571,9 @@
             <template lwc:if={showRightPanelContent}>
                 <template lwc:if={isVariablePanelOpen}>
                     <div class="builder-panel builder-panel_variable">
-                        <div class="var-panel-header var-panel-header_picker">
-                            <span class="var-panel-header-label">Variable</span>
-                            <div class="variant-picker">
-                                <button type="button" class="variant-picker-btn" onclick={handleToggleVariantPicker} aria-haspopup="listbox" aria-expanded={variantPickerOpen}>
-                                    <span class="variant-picker-btn-label">{variantPickerButtonLabel}</span>
-                                    <lightning-icon icon-name="utility:down" size="xx-small" variant="bare" class="variant-picker-btn-icon"></lightning-icon>
-                                </button>
-                                <template lwc:if={variantPickerOpen}>
-                                    <div class="variant-picker-dropdown">
-                                        <div class="variant-picker-search">
-                                            <lightning-input variant="label-hidden" type="search" placeholder="Search variables..." value={variantPickerSearch} onchange={handleVariantPickerSearch}></lightning-input>
-                                        </div>
-                                        <div class="variant-picker-list" role="listbox">
-                                            <template for:each={variantPickerOptions} for:item="opt">
-                                                <button type="button" key={opt.id} class={opt.itemClass} data-id={opt.id} onclick={handleVariantPickerSelect} role="option" disabled={opt.disabled} aria-disabled={opt.disabled}>
-                                                    {opt.name}
-                                                </button>
-                                            </template>
-                                        </div>
-                                    </div>
-                                </template>
-                            </div>
+                        <div class="var-panel-header">
+                            <h3 class="var-panel-title">{activeVariable.name}</h3>
+                            <lightning-button-icon icon-name="utility:close" variant="bare" size="small" alternative-text="Close panel" onclick={handleCloseVariablePanel}></lightning-button-icon>
                         </div>
                         <div class="var-panel-tabs">
                             <div class="var-panel-tab var-panel-tab_active">{labels.SettingsTab}</div>
@@ -677,14 +658,6 @@
                                         </div>
                                     </template>
                                 </template>
-                                <ui-sample-outcome
-                                    transformation={sampleOutcomeTransformation}
-                                    before-bars={semanticBeforeBars}
-                                    after-bars={semanticAfterBars}
-                                    before-caption={sampleOutcomeBeforeCaption}
-                                    after-caption={sampleOutcomeAfterCaption}
-                                    hide-risk
-                                ></ui-sample-outcome>
                             </div>
 
                             <template lwc:if={showReplaceMissingOptions}>
