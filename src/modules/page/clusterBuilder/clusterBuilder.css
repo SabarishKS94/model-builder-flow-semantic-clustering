@@ -1576,13 +1576,148 @@
     color: var(--slds-g-color-on-surface-1, #181818);
 }
 
-/* Semantic Grouping — budget badge */
-.sg-badge-variant {
-    --sds-c-badge-radius-border: 999px;
+/* Semantic Grouping — budget, auto badge, hints */
+.semantic-budget {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: #022ac0;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #bcd0fb;
+    --slds-c-icon-color-foreground-default: #022ac0;
+    --slds-c-icon-color-foreground: #022ac0;
+}
+
+.semantic-budget_full {
+    background: #fef5e7;
+    color: #8a4600;
+    border-color: #fbcc8c;
+    --slds-c-icon-color-foreground-default: #8a4600;
+    --slds-c-icon-color-foreground: #8a4600;
 }
 
 .semantic-budget-icon {
     flex-shrink: 0;
+}
+
+.semantic-budget-text {
+    white-space: nowrap;
+}
+
+/* --- Semantic budget variants (side-by-side comparison) --- */
+.sg-variant-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--slds-g-color-on-surface-2, #5c5c5c);
+    margin-left: 12px;
+}
+
+/* Variant 1: lightning-badge */
+.sg-badge-variant {
+    --sds-c-badge-radius-border: 999px;
+}
+
+/* Variant 2: label + progress meter + count */
+.sg-meter {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: var(--slds-g-color-surface-2, #f3f3f3);
+    color: var(--slds-g-color-on-surface-1, #181818);
+    font-size: 12px;
+    font-weight: 600;
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-surface-2, #5c5c5c);
+    --slds-c-icon-color-foreground: var(--slds-g-color-on-surface-2, #5c5c5c);
+}
+
+.sg-meter-track {
+    display: inline-block;
+    width: 60px;
+    height: 6px;
+    background: var(--slds-g-color-neutral-base-80, #d8d8d8);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.sg-meter-fill {
+    display: block;
+    height: 100%;
+    background: var(--slds-g-color-accent-container-1, #1b96ff);
+    border-radius: 999px;
+    transition: width 160ms ease;
+}
+
+.sg-meter_full .sg-meter-fill {
+    background: var(--slds-g-color-warning-container-1, #fe9339);
+}
+
+.sg-meter_full {
+    --slds-c-icon-color-foreground-default: #8a4600;
+    --slds-c-icon-color-foreground: #8a4600;
+    color: #8a4600;
+}
+
+.sg-meter-count {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+.sg-meter-count-max {
+    color: var(--slds-g-color-on-surface-2, #5c5c5c);
+    font-weight: 400;
+}
+
+/* Variant 3: SLDS token-style compound pill */
+.sg-token {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    border-radius: 999px;
+    background: var(--slds-g-color-surface-container-1, #ffffff);
+    border: 1px solid var(--slds-g-color-border-1, #c9c9c9);
+    color: var(--slds-g-color-on-surface-1, #181818);
+    font-size: 12px;
+    font-weight: 600;
+    overflow: hidden;
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-on-surface-2, #5c5c5c);
+    --slds-c-icon-color-foreground: var(--slds-g-color-on-surface-2, #5c5c5c);
+}
+
+.sg-token-icon {
+    padding: 4px 6px 4px 10px;
+}
+
+.sg-token-text {
+    padding: 4px 8px 4px 4px;
+}
+
+.sg-token-count {
+    padding: 4px 10px;
+    background: var(--slds-g-color-surface-2, #f3f3f3);
+    border-left: 1px solid var(--slds-g-color-border-1, #c9c9c9);
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+}
+
+.sg-token_full {
+    background: #fef5e7;
+    border-color: #fbcc8c;
+    color: #8a4600;
+    --slds-c-icon-color-foreground-default: #8a4600;
+    --slds-c-icon-color-foreground: #8a4600;
+}
+
+.sg-token_full .sg-token-count {
+    background: #fbcc8c;
+    border-left-color: #f8a24b;
 }
 
 .var-action-group {
