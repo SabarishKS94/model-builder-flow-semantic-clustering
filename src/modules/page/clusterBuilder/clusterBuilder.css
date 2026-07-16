@@ -1060,6 +1060,15 @@
     border-bottom: 1px solid var(--slds-g-color-border-1, #e5e5e5);
 }
 
+.var-panel-title {
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: var(--slds-g-color-on-surface-1, #181818);
+    margin: 0;
+}
+
 .var-panel-header_picker {
     flex-direction: column;
     align-items: stretch;
