@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { navigate } from '../../../router';
 import * as Labels from 'data/labels/ClusterBuilder';
 import DataViewerModal from 'ui/dataViewerModal';
 
@@ -1521,7 +1522,7 @@ applyTransformationToActive(value) {
 
     handleBack() {
         if (this.shelfMode) return;
-        window.location.href = '/app/aim-cluster';
+        navigate('/app/aim-cluster');
     }
 
     handleToggleAgentforce() {

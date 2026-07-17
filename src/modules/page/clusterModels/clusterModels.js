@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import { navigate } from '../../../router';
+import { navigate, linkHref } from '../../../router';
 import { listClusterModels } from 'data/services/clusterModelsService';
 import * as Labels from 'data/labels/ClusterModels';
 
@@ -51,6 +51,6 @@ export default class ClusterModels extends LightningElement {
     }
 
     handleNewModel() {
-        window.open('/app/aim-cluster/builder', '_blank');
+        window.open(linkHref('/app/aim-cluster/builder'), '_blank');
     }
 }
