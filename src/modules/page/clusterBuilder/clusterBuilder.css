@@ -689,16 +689,20 @@
     justify-content: flex-start;
 }
 
-.var-checkbox {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-    accent-color: var(--slds-g-color-accent-2, #0250d9);
+.var-checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
 }
 
-.var-checkbox:disabled {
-    cursor: not-allowed;
-    accent-color: var(--slds-g-color-neutral-base-70, #aeaeae);
+.var-checkbox-wrap .slds-checkbox__label {
+    padding-left: 0;
+    display: inline-flex;
+    align-items: center;
+    min-height: 0;
+}
+
+.var-checkbox-wrap .slds-checkbox_faux {
+    margin: 0;
 }
 
 .var-type-icon {
@@ -2139,13 +2143,13 @@
 }
 
 .var-row_locked .var-type-icon {
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-neutral-base-70, #aeaeae);
-    --slds-c-icon-color-foreground: var(--slds-g-color-neutral-base-70, #aeaeae);
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
+    --slds-c-icon-color-foreground: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
 }
 
 .var-name_disabled {
     font-size: 14px;
-    color: var(--slds-g-color-neutral-base-70, #aeaeae);
+    color: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

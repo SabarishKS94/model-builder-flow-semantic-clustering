@@ -513,7 +513,13 @@
                                 <template for:each={filteredVariables} for:item="v">
                                     <div key={v.id} class={v.rowClass} aria-disabled={v.isLocked}>
                                         <div class="var-cell var-cell_check">
-                                            <input type="checkbox" class="var-checkbox" data-id={v.id} checked={v.isSelected} disabled={v.isLocked} onchange={handleVariableToggle} />
+                                            <span class="slds-checkbox var-checkbox-wrap">
+                                                <input type="checkbox" name={v.id} id={v.checkboxId} class="var-checkbox" data-id={v.id} checked={v.isSelected} disabled={v.isLocked} onchange={handleVariableToggle} />
+                                                <label class="slds-checkbox__label" for={v.checkboxId}>
+                                                    <span class="slds-checkbox_faux"></span>
+                                                    <span class="slds-form-element__label slds-assistive-text">{v.name}</span>
+                                                </label>
+                                            </span>
                                         </div>
                                         <div class="var-cell var-cell_variable">
                                             <lightning-icon icon-name={v.iconName} size="xx-small" variant="bare" class="var-type-icon"></lightning-icon>
@@ -709,49 +715,52 @@
                                 </div>
                             </template>
 
-<template lwc:if={showTextFrequencyChart}>
-                                <div class="var-panel-distribution">
-                                    <h4 class="var-panel-distribution-title">{labels.DistributionLabel}</h4>
-                                    <div class="var-freq-chart">
-                                        <div class="var-freq-axis-title">{labels.CountAxisLabel}</div>
-                                        <div class="var-freq-plot">
-                                            <div class="var-freq-axis-scale">
-                                                <template for:each={textFreqTicks} for:item="t">
-                                                    <span key={t.key} class="var-freq-tick" style={t.style}>{t.label}</span>
-                                                </template>
-                                            </div>
-                                            <div class="var-freq-grid">
-                                                <template for:each={textFreqTicks} for:item="t">
-                                                    <span key={t.key} class="var-freq-gridline" style={t.style}></span>
-                                                </template>
-                                            </div>
-                                            <template for:each={textFrequencies} for:item="row">
-                                                <div key={row.label} class="var-freq-row">
-                                                    <span class="var-freq-label">{row.label}</span>
-                                                    <div class="var-freq-bar-wrap">
-                                                        <div class="var-freq-bar" style={row.barStyle}>
-                                                            <span class={row.countCls}>{row.count}</span>
+<!-- Distribution hidden for v1; kept in source for future work -->
+                            <template lwc:if={showDistributionSection}>
+                                <template lwc:if={showTextFrequencyChart}>
+                                    <div class="var-panel-distribution">
+                                        <h4 class="var-panel-distribution-title">{labels.DistributionLabel}</h4>
+                                        <div class="var-freq-chart">
+                                            <div class="var-freq-axis-title">{labels.CountAxisLabel}</div>
+                                            <div class="var-freq-plot">
+                                                <div class="var-freq-axis-scale">
+                                                    <template for:each={textFreqTicks} for:item="t">
+                                                        <span key={t.key} class="var-freq-tick" style={t.style}>{t.label}</span>
+                                                    </template>
+                                                </div>
+                                                <div class="var-freq-grid">
+                                                    <template for:each={textFreqTicks} for:item="t">
+                                                        <span key={t.key} class="var-freq-gridline" style={t.style}></span>
+                                                    </template>
+                                                </div>
+                                                <template for:each={textFrequencies} for:item="row">
+                                                    <div key={row.label} class="var-freq-row">
+                                                        <span class="var-freq-label">{row.label}</span>
+                                                        <div class="var-freq-bar-wrap">
+                                                            <div class="var-freq-bar" style={row.barStyle}>
+                                                                <span class={row.countCls}>{row.count}</span>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </template>
+                                                </template>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </template>
+                                </template>
 
-                            <template lwc:if={showDistribution}>
-                                <div class="var-panel-distribution">
-                                    <h4 class="var-panel-distribution-title">{labels.DistributionLabel}</h4>
-                                    <p class="var-panel-distribution-row">
-                                        <span class="var-panel-distribution-label">{labels.MinValueLabel}</span>
-                                        <span class="var-panel-distribution-value">{distributionMin}</span>
-                                    </p>
-                                    <p class="var-panel-distribution-row">
-                                        <span class="var-panel-distribution-label">{labels.MaxValueLabel}</span>
-                                        <span class="var-panel-distribution-value">{distributionMax}</span>
-                                    </p>
-                                </div>
+                                <template lwc:if={showDistribution}>
+                                    <div class="var-panel-distribution">
+                                        <h4 class="var-panel-distribution-title">{labels.DistributionLabel}</h4>
+                                        <p class="var-panel-distribution-row">
+                                            <span class="var-panel-distribution-label">{labels.MinValueLabel}</span>
+                                            <span class="var-panel-distribution-value">{distributionMin}</span>
+                                        </p>
+                                        <p class="var-panel-distribution-row">
+                                            <span class="var-panel-distribution-label">{labels.MaxValueLabel}</span>
+                                            <span class="var-panel-distribution-value">{distributionMax}</span>
+                                        </p>
+                                    </div>
+                                </template>
                             </template>
                         </div>
                     </div>

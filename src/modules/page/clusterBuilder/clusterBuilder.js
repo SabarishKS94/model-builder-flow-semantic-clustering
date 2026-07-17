@@ -710,6 +710,7 @@ applyTransformationToActive(value) {
                 showRecoBadge: isRecoPending,
                 showAppliedBadge: isRecoApplied,
                 isLocked: v4Locked,
+                checkboxId: `var-cb-${v.id}`,
                 lockedReason: v4LockedReason,
                 lockedTooltip: v4LockedTooltip,
                 showLockedTooltip: !!v4LockedTooltip,
@@ -973,6 +974,10 @@ applyTransformationToActive(value) {
         else if (frac <= 5) nice = 5;
         else nice = 10;
         return nice * exp;
+    }
+
+    get showDistributionSection() {
+        return false;
     }
 
     get showTextFrequencyChart() {
