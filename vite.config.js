@@ -43,7 +43,12 @@ function suppressLbcLwcLoggerNoisePlugin() {
 
 export default defineConfig(({mode}) => {
   return {
-    base: mode === 'gh-pages' ? './' : '/',
+    base:
+      mode === 'gh-pages'
+        ? './'
+        : mode === 'soma-pages'
+          ? '/pages/sabarish-ks/model-builder-flow-semantic-clustering/'
+          : '/',
     build: {
       outDir: 'dist',
       rollupOptions: {
