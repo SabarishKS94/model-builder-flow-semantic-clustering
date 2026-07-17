@@ -696,6 +696,11 @@
     accent-color: var(--slds-g-color-accent-2, #0250d9);
 }
 
+.var-checkbox:disabled {
+    cursor: not-allowed;
+    accent-color: var(--slds-g-color-neutral-base-70, #aeaeae);
+}
+
 .var-type-icon {
     --slds-c-icon-color-foreground-default: var(--slds-g-color-neutral-60, #444444);
     --slds-c-icon-color-foreground: var(--slds-g-color-neutral-60, #444444);
@@ -2124,16 +2129,31 @@
     margin-left: 8px;
 }
 
-/* ---------- V4: Locked row ---------- */
-.var-row_locked .var-name,
-.var-row_locked .var-type-icon {
-    opacity: 0.5;
-    pointer-events: none;
+/* ---------- V4: Locked row (SLDS disabled convention) ---------- */
+.var-row_locked {
+    background: var(--slds-g-color-surface-1, #ffffff);
 }
 
-.var-row_locked .var-checkbox {
-    opacity: 0.4;
+.var-row_locked:hover {
+    background: var(--slds-g-color-surface-1, #ffffff);
+}
+
+.var-row_locked .var-type-icon {
+    --slds-c-icon-color-foreground-default: var(--slds-g-color-neutral-base-70, #aeaeae);
+    --slds-c-icon-color-foreground: var(--slds-g-color-neutral-base-70, #aeaeae);
+}
+
+.var-name_disabled {
+    font-size: 14px;
+    color: var(--slds-g-color-neutral-base-70, #aeaeae);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     cursor: not-allowed;
+}
+
+.var-row_locked .var-long-text-badge {
+    opacity: 0.6;
 }
 
 .var-locked-text {

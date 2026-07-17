@@ -511,13 +511,18 @@
                                     </div>
                                 </div>
                                 <template for:each={filteredVariables} for:item="v">
-                                    <div key={v.id} class={v.rowClass}>
+                                    <div key={v.id} class={v.rowClass} aria-disabled={v.isLocked}>
                                         <div class="var-cell var-cell_check">
-                                            <input type="checkbox" class="var-checkbox" data-id={v.id} checked={v.isSelected} onchange={handleVariableToggle} />
+                                            <input type="checkbox" class="var-checkbox" data-id={v.id} checked={v.isSelected} disabled={v.isLocked} onchange={handleVariableToggle} />
                                         </div>
                                         <div class="var-cell var-cell_variable">
                                             <lightning-icon icon-name={v.iconName} size="xx-small" variant="bare" class="var-type-icon"></lightning-icon>
-                                            <a href="#" class="var-name" data-id={v.id} onclick={handleVariableNameClick}>{v.name}</a>
+                                            <template lwc:if={v.isLocked}>
+                                                <span class="var-name var-name_disabled">{v.name}</span>
+                                            </template>
+                                            <template lwc:else>
+                                                <a href="#" class="var-name" data-id={v.id} onclick={handleVariableNameClick}>{v.name}</a>
+                                            </template>
                                             <template lwc:if={v.showLongTextPill}>
                                                 <lightning-badge label={labels.LongTextPillLabel} class="var-long-text-badge"></lightning-badge>
                                             </template>
