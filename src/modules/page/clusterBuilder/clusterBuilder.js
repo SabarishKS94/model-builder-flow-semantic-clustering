@@ -129,12 +129,12 @@ const VARIANT_PRESETS = {
         pendingRecos: new Set(),
     },
     v4: {
-        selectedVariableIds: new Set(),
-        variableActions: {},
-        variableTransformations: {},
-        autoAppliedSemantic: new Set(),
-        pendingRecos: new Set(['v8', 'v26']),
-        semanticMode: false,
+        selectedVariableIds: new Set(['v8', 'v26']),
+        variableActions: { v8: 'Semantic Grouping', v26: 'Semantic Grouping' },
+        variableTransformations: { v8: 'semantic-grouping', v26: 'semantic-grouping' },
+        autoAppliedSemantic: new Set(['v8', 'v26']),
+        pendingRecos: new Set(),
+        semanticMode: true,
     },
 };
 
