@@ -1671,11 +1671,6 @@
     --slds-c-icon-color-foreground: var(--slds-g-color-warning-2, #8a4600);
 }
 
-.reco-callout p {
-    margin: 0;
-    line-height: 1.4;
-}
-
 .semantic-locked-icon {
     flex-shrink: 0;
 }

@@ -31,9 +31,6 @@ import NbaModelDetail from 'page/nbaModelDetail';
 import PredictModels from 'page/predictModels';
 import ClusterModels from 'page/clusterModels';
 import ClusterBuilder from 'page/clusterBuilder';
-import ClusterBuilderV2 from 'page/clusterBuilderV2';
-import ClusterBuilderV3 from 'page/clusterBuilderV3';
-import ClusterBuilderV4 from 'page/clusterBuilderV4';
 import FeatureManager from 'page/featureManager';
 import AnalyzePredict1 from 'page/analyzePredict1';
 import AnalyzePredict2 from 'page/analyzePredict2';
@@ -68,9 +65,6 @@ const ROUTE_COMPONENTS = {
     'page-predict-models': PredictModels,
     'page-cluster-models': ClusterModels,
     'page-cluster-builder': ClusterBuilder,
-    'page-cluster-builder-v2': ClusterBuilderV2,
-    'page-cluster-builder-v3': ClusterBuilderV3,
-    'page-cluster-builder-v4': ClusterBuilderV4,
     'page-feature-manager': FeatureManager,
     'page-analyze-predict1': AnalyzePredict1,
     'page-analyze-predict2': AnalyzePredict2,
