@@ -1616,27 +1616,14 @@
     line-height: 14px;
 }
 
-.semantic-locked-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 6px;
-    padding: 6px 8px;
-    font-size: 12px;
-    color: var(--slds-g-color-warning-2, #8a4600);
-    background: var(--slds-g-color-warning-container-1, #fef5e7);
-    border-radius: 4px;
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-warning-2, #8a4600);
-    --slds-c-icon-color-foreground: var(--slds-g-color-warning-2, #8a4600);
+.semantic-locked-notification p {
+    margin: 0;
+    line-height: 1.4;
 }
 
 .reco-callout p {
     margin: 0;
     line-height: 1.4;
-}
-
-.semantic-locked-icon {
-    flex-shrink: 0;
 }
 
 .semantic-error {

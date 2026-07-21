@@ -632,9 +632,13 @@
                                         </div>
                                     </template>
                                     <template lwc:if={isActiveSemanticLocked}>
-                                        <div class="semantic-locked-hint">
-                                            <lightning-icon icon-name="utility:lock" size="xx-small" class="semantic-locked-icon"></lightning-icon>
-                                            <span>{semanticLockedHint}</span>
+                                        <div class="slds-scoped-notification slds-media slds-media_center slds-theme_warning semantic-locked-notification slds-m-top_x-small" role="status">
+                                            <div class="slds-media__figure">
+                                                <lightning-icon icon-name="utility:lock" size="x-small" alternative-text="Locked"></lightning-icon>
+                                            </div>
+                                            <div class="slds-media__body">
+                                                <p class="slds-text-body_small">{semanticLockedHint}</p>
+                                            </div>
                                         </div>
                                     </template>
                                 </template>

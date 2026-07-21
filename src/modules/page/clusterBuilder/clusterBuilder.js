@@ -12,25 +12,9 @@ const STEPS = [
 ];
 
 const ACCOUNT_VARIABLES = [
-    { id: 'v1', name: 'Account_ExternalId', type: 'number', min: 1000, max: 99999 },
     { id: 'v2', name: 'Annual Revenue', type: 'number', highMissing: true, selected: true, action: 'Replace Missing Values', min: 50000, max: 12500000 },
     { id: 'v5', name: 'Employees', type: 'number', min: 1, max: 250000 },
     { id: 'v6', name: 'Global Discount', type: 'number', min: 0, max: 0.45 },
-    { id: 'v7', name: 'Account Currency', type: 'text', frequencies: [
-        { label: 'USD', count: 14000 },
-        { label: 'EUR', count: 11000 },
-        { label: 'GBP', count: 2900 },
-        { label: 'JPY', count: 1400 },
-        { label: 'CAD', count: 1300 },
-        { label: 'AUD', count: 403 },
-    ] },
-    { id: 'v8', name: 'Account Description', type: 'text', isLargeText: true, avgChars: 2400, selected: true, action: 'Semantic Grouping', frequencies: [
-        { label: '< 500 chars', count: 4200 },
-        { label: '500–1.5K', count: 7800 },
-        { label: '1.5K–3K', count: 6900 },
-        { label: '3K–5K', count: 3400 },
-        { label: '5K+', count: 1200 },
-    ] },
     { id: 'v11', name: 'Account Name', type: 'text', frequencies: [
         { label: 'Starts A–E', count: 6200 },
         { label: 'Starts F–J', count: 5100 },
@@ -51,16 +35,6 @@ const ACCOUNT_VARIABLES = [
         { label: 'Prospect', count: 4400 },
         { label: 'Other', count: 1100 },
     ] },
-    { id: 'v16', name: 'Billing Country', type: 'text', frequencies: [
-        { label: 'United States', count: 15800 },
-        { label: 'United Kingdom', count: 4200 },
-        { label: 'Germany', count: 3100 },
-        { label: 'France', count: 2400 },
-        { label: 'Japan', count: 1700 },
-        { label: 'Canada', count: 1200 },
-    ] },
-    { id: 'v20', name: 'Created Date', type: 'date', selected: true, action: 'Group by Day', min: '1/1/2013, 05:30 AM', max: '1/22/2025, 05:30 AM' },
-    { id: 'v21', name: 'Last Activity', type: 'date', selected: true, action: 'Group by Month', min: '4/12/2014, 05:30 AM', max: '6/29/2026, 05:30 AM' },
     { id: 'v22', name: 'Industry', type: 'text', frequencies: [
         { label: 'Technology', count: 8400 },
         { label: 'Financial Services', count: 6200 },
@@ -68,6 +42,13 @@ const ACCOUNT_VARIABLES = [
         { label: 'Manufacturing', count: 3700 },
         { label: 'Retail', count: 2500 },
         { label: 'Education', count: 1100 },
+    ] },
+    { id: 'v8', name: 'Account Description', type: 'text', isLargeText: true, avgChars: 2400, selected: true, action: 'Semantic Grouping', frequencies: [
+        { label: '< 500 chars', count: 4200 },
+        { label: '500–1.5K', count: 7800 },
+        { label: '1.5K–3K', count: 6900 },
+        { label: '3K–5K', count: 3400 },
+        { label: '5K+', count: 1200 },
     ] },
     { id: 'v26', name: 'Support Notes', type: 'text', isLargeText: true, avgChars: 3100, selected: true, action: 'Semantic Grouping', frequencies: [
         { label: '< 500 chars', count: 2100 },
@@ -83,6 +64,8 @@ const ACCOUNT_VARIABLES = [
         { label: '3K–5K', count: 1600 },
         { label: '5K+', count: 420 },
     ] },
+    { id: 'v20', name: 'Created Date', type: 'date', selected: true, action: 'Group by Day', min: '1/1/2013, 05:30 AM', max: '1/22/2025, 05:30 AM' },
+    { id: 'v21', name: 'Last Activity', type: 'date', selected: true, action: 'Group by Month', min: '4/12/2014, 05:30 AM', max: '6/29/2026, 05:30 AM' },
 ];
 
 const DATA_MODEL_OBJECTS = [
