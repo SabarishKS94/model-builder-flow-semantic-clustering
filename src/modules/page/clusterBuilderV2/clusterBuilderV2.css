@@ -618,7 +618,6 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    flex-wrap: wrap;
 }
 
 .prepare-toolbar-right {
@@ -730,20 +729,11 @@
     justify-content: flex-start;
 }
 
-.var-checkbox-wrap {
-    display: inline-flex;
-    align-items: center;
-}
-
-.var-checkbox-wrap .slds-checkbox__label {
-    padding-left: 0;
-    display: inline-flex;
-    align-items: center;
-    min-height: 0;
-}
-
-.var-checkbox-wrap .slds-checkbox_faux {
-    margin: 0;
+.var-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--slds-g-color-accent-2, #0250d9);
 }
 
 .var-type-icon {
@@ -1111,21 +1101,33 @@
     border-bottom: 1px solid var(--slds-g-color-border-1, #e5e5e5);
 }
 
-.var-panel-title {
-    font-family: inherit;
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 20px;
-    color: var(--slds-g-color-on-surface-1, #181818);
-    margin: 0;
-}
-
 .var-panel-header_picker {
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
     padding: 16px 20px 12px;
     border-bottom: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+}
+
+/* V2: SLDS-style panel header — bold heading + native combobox */
+.var-panel-header_slds {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 16px 20px 12px;
+    border-bottom: 1px solid var(--slds-g-color-border-1, #e5e5e5);
+}
+
+.var-panel-slds-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--cos-color-on-surface-3, #03234d);
+    line-height: 24px;
+    margin: 0;
+}
+
+.var-panel-slds-combobox {
+    display: block;
 }
 
 .var-panel-header-label {
@@ -1626,13 +1628,36 @@
     color: var(--slds-g-color-on-surface-1, #181818);
 }
 
-/* Semantic Grouping — budget badge */
-.sg-badge-variant {
-    --sds-c-badge-radius-border: 999px;
+/* Semantic Grouping — budget, auto badge, hints */
+.semantic-budget {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: #022ac0;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid #bcd0fb;
+    --slds-c-icon-color-foreground-default: #022ac0;
+    --slds-c-icon-color-foreground: #022ac0;
+}
+
+.semantic-budget_full {
+    background: #fef5e7;
+    color: #8a4600;
+    border-color: #fbcc8c;
+    --slds-c-icon-color-foreground-default: #8a4600;
+    --slds-c-icon-color-foreground: #8a4600;
 }
 
 .semantic-budget-icon {
     flex-shrink: 0;
+}
+
+.semantic-budget-text {
+    white-space: nowrap;
 }
 
 .var-action-group {
@@ -2129,44 +2154,101 @@
     pointer-events: auto;
 }
 
-/* ---------- V4: Semantic grouping scoped notification ---------- */
-.sg-scoped-notification {
-    margin: 0 24px 16px;
-    border-radius: 8px;
-}
-
-.sg-scoped-notification__body {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 2px;
-    min-width: 0;
-    text-align: left;
-}
-
-.sg-scoped-notification__title-row {
+/* ---------- V4: Merged Einstein + Semantic-mode banner ---------- */
+.v4-banner {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    gap: 14px;
+    padding: 14px 16px;
+    margin: 0 24px 16px;
+    background: #eef4ff;
+    border: 1px solid #bcd0fb;
+    border-left: 4px solid #0250d9;
+    border-radius: 8px;
+    box-sizing: border-box;
+}
+
+.v4-banner-icon {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    background: #ffffff;
+    border: 1px solid #bcd0fb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --slds-c-icon-color-foreground-default: #0250d9;
+    --slds-c-icon-color-foreground: #0250d9;
+}
+
+.v4-banner-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.v4-banner-heading-row {
+    display: flex;
+    align-items: center;
     gap: 8px;
     flex-wrap: wrap;
-    width: 100%;
+    margin-bottom: 2px;
 }
 
-.sg-scoped-notification__new {
-    --sds-c-badge-color-background: #2e844a;
-    --sds-c-badge-text-color: #ffffff;
-    --sds-c-badge-radius-border: 4px;
+.v4-banner-heading {
+    color: #022ac0;
+    font-weight: 700;
+    font-size: 14px;
+    white-space: normal;
+}
+
+.v4-banner-new-pill {
+    background: #2e844a;
+    color: #ffffff;
+    font-size: 10px;
     font-weight: 700;
     letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 4px;
     text-transform: uppercase;
+    flex-shrink: 0;
 }
 
-.sg-scoped-notification__subtext {
-    font-size: 12px;
+.v4-banner-helptext {
+    --slds-c-icon-color-foreground-default: #022ac0;
+    --slds-c-icon-color-foreground: #022ac0;
+}
+
+.v4-banner-body {
+    color: #181818;
+    font-size: 13px;
+    margin: 0 0 4px 0;
     line-height: 1.4;
-    color: var(--slds-g-color-on-surface-2, #5c5c5c);
+}
+
+.v4-banner-vars {
+    color: #444;
+    font-size: 12px;
     margin: 0;
+    font-style: italic;
+}
+
+.v4-banner-toggle {
+    flex: 0 0 auto;
+    width: auto;
+    margin-left: 12px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.v4-banner-toggle .slds-checkbox_faux_container {
+    display: inline-flex;
+    align-items: center;
+}
+
+.v4-banner-toggle .slds-checkbox_on,
+.v4-banner-toggle .slds-checkbox_off {
+    display: none !important;
 }
 
 /* ---------- V4: Long-text badge ---------- */
@@ -2174,31 +2256,16 @@
     margin-left: 8px;
 }
 
-/* ---------- V4: Locked row (SLDS disabled convention) ---------- */
-.var-row_locked {
-    background: var(--slds-g-color-surface-1, #ffffff);
-}
-
-.var-row_locked:hover {
-    background: var(--slds-g-color-surface-1, #ffffff);
-}
-
+/* ---------- V4: Locked row ---------- */
+.var-row_locked .var-name,
 .var-row_locked .var-type-icon {
-    --slds-c-icon-color-foreground-default: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
-    --slds-c-icon-color-foreground: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
+    opacity: 0.5;
+    pointer-events: none;
 }
 
-.var-name_disabled {
-    font-size: 14px;
-    color: var(--slds-g-color-disabled-1, var(--slds-g-color-neutral-base-50, #747474));
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.var-row_locked .var-checkbox {
+    opacity: 0.4;
     cursor: not-allowed;
-}
-
-.var-row_locked .var-long-text-badge {
-    opacity: 0.6;
 }
 
 .var-locked-text {

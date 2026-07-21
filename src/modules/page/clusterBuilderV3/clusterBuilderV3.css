@@ -1671,6 +1671,18 @@
     --slds-c-icon-color-foreground: var(--slds-g-color-warning-2, #8a4600);
 }
 
+.reco-card {
+    background: var(--slds-g-color-neutral-base-95, #f3f3f3);
+    border-color: var(--slds-g-color-border-base-2, #c9c9c9);
+}
+
+.reco-card-badge {
+    --slds-c-badge-color-background: var(--slds-g-color-surface-container-1, #ffffff);
+    --slds-c-badge-text-color: var(--slds-g-color-brand-base-30, #032d60);
+    --slds-c-badge-color-border: var(--slds-g-color-border-brand-1, #b6c9ff);
+    --slds-c-badge-radius-border: 999px;
+}
+
 .semantic-locked-icon {
     flex-shrink: 0;
 }

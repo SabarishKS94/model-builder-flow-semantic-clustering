@@ -13,7 +13,7 @@ const STEPS = [
 
 const ACCOUNT_VARIABLES = [
     { id: 'v1', name: 'Account_ExternalId', type: 'number', min: 1000, max: 99999 },
-    { id: 'v2', name: 'Annual Revenue', type: 'number', selected: true, action: 'Replace Missing Values', min: 50000, max: 12500000 },
+    { id: 'v2', name: 'Annual Revenue', type: 'number', highMissing: true, selected: true, action: 'Replace Missing Values', min: 50000, max: 12500000 },
     { id: 'v5', name: 'Employees', type: 'number', min: 1, max: 250000 },
     { id: 'v6', name: 'Global Discount', type: 'number', min: 0, max: 0.45 },
     { id: 'v7', name: 'Account Currency', type: 'text', frequencies: [
@@ -103,15 +103,15 @@ const DATA_MODEL_OBJECTS = [
 ];
 
 const VARIANT_STORAGE_KEY = 'cb.variant';
-const DEFAULT_VARIANT = 'v4';
+const DEFAULT_VARIANT = 'v1';
 const LARGE_TEXT_IDS = ['v8', 'v26', 'v27'];
 
 const VARIANT_PRESETS = {
     v1: {
-        selectedVariableIds: new Set(['v8', 'v26']),
-        variableActions: { v8: 'Semantic Grouping', v26: 'Semantic Grouping' },
-        variableTransformations: { v8: 'semantic-grouping', v26: 'semantic-grouping' },
-        autoAppliedSemantic: new Set(['v8', 'v26']),
+        selectedVariableIds: new Set(),
+        variableActions: {},
+        variableTransformations: {},
+        autoAppliedSemantic: new Set(),
         pendingRecos: new Set(),
     },
     v2: {
@@ -138,7 +138,7 @@ const VARIANT_PRESETS = {
     },
 };
 
-export default class ClusterBuilder extends LightningElement {
+export default class ClusterBuilderV4 extends LightningElement {
     labels = Labels;
     @track currentStep = 1;
     @track showLeftPanel = true;
@@ -181,6 +181,7 @@ export default class ClusterBuilder extends LightningElement {
     @track shelfMode = false;
     @track semanticMode = false;
     @track semanticErrorMessage = '';
+    @track recommendationDismissed = new Set();
     _semanticErrorTimer = null;
 
     connectedCallback() {
@@ -805,6 +806,90 @@ applyTransformationToActive(value) {
         return 'none';
     }
 
+    get recommendedTransformation() {
+        const v = this.activeVariable;
+        if (!v) return null;
+        if (v.type === 'text') {
+            return v.isLargeText ? 'semantic-grouping' : 'text-clustering';
+        }
+        if (v.type === 'number' && v.highMissing) return 'replace-missing';
+        return null;
+    }
+
+    get showRecommendationCard() {
+        const v = this.activeVariable;
+        if (!v) return false;
+        if (this.recommendationDismissed.has(v.id)) return false;
+        if (this.isActiveSemanticLocked) return false;
+        const reco = this.recommendedTransformation;
+        return reco !== null && this.activeTransformation !== reco;
+    }
+
+    get recommendationTitle() {
+        return '';
+    }
+
+    get recommendationLabel() {
+        return '';
+    }
+
+    get recommendationProfile() {
+        return '';
+    }
+
+    get recommendationReason() {
+        return '';
+    }
+
+    get recommendationMessage() {
+        const reco = this.recommendedTransformation;
+        if (reco === 'semantic-grouping') {
+            return 'This looks to be a field with long text and high number of unique values (cardinality). We recommend to apply Semantic Clustering to extract semantic insights from this data.';
+        }
+        if (reco === 'text-clustering') {
+            return 'This is a text field with high number of unique values (cardinality). We recommend to apply Text Clustering / Semantic Clustering to make it more usable in the model.';
+        }
+        if (reco === 'replace-missing') {
+            return 'This number field has high number of missing values. We recommend to apply Replace missing values to ensure this field is more usable.';
+        }
+        return '';
+    }
+
+    handleApplyRecommendation() {
+        const id = this.activeVariableId;
+        const reco = this.recommendedTransformation;
+        if (!id || !reco) return;
+        this.applyTransformationValue(id, reco);
+    }
+
+    handleDismissRecommendation() {
+        const id = this.activeVariableId;
+        if (!id) return;
+        const next = new Set(this.recommendationDismissed);
+        next.add(id);
+        this.recommendationDismissed = next;
+    }
+
+    applyTransformationValue(id, value) {
+        const trans = { ...this.variableTransformations };
+        const actions = { ...this.variableActions };
+        const next = new Set(this.selectedVariableIds);
+        const auto = new Set(this.autoAppliedSemantic);
+        this._clearSemanticError();
+        trans[id] = value;
+        if (value === 'text-clustering') actions[id] = Labels.TransformationTextClustering;
+        else if (value === 'semantic-grouping') actions[id] = Labels.TransformationSemanticGrouping;
+        else if (value === 'replace-missing') actions[id] = Labels.TransformationReplaceMissing;
+        else if (value === 'group-by-month') actions[id] = Labels.TransformationGroupByMonth;
+        else if (value === 'group-by-day') actions[id] = Labels.TransformationGroupByDay;
+        next.add(id);
+        if (value !== 'semantic-grouping') auto.delete(id);
+        this.variableTransformations = trans;
+        this.variableActions = actions;
+        this.selectedVariableIds = next;
+        this.autoAppliedSemantic = auto;
+    }
+
     get sampleOutcomeTransformation() {
         const t = this.activeTransformation;
         if (t && t !== 'none') return t;
@@ -856,25 +941,16 @@ applyTransformationToActive(value) {
     get transformationOptions() {
         const v = this.activeVariable;
         if (!v) return [];
+        const reco = this.recommendedTransformation;
+        const withRecoTag = (opts) => opts.map((o) =>
+            o.value === reco ? { ...o, label: `${o.label} (Recommended)` } : o
+        );
         if (v.type === 'text') {
-            const currentValue = this.activeTransformation;
-            const semanticLocked = this.semanticBudgetReached && currentValue !== 'semantic-grouping';
-            const options = [{ label: Labels.TransformationNone, value: 'none' }];
-            if (!v.isLargeText) {
-                options.push({
-                    label: Labels.TransformationTextClustering,
-                    value: 'text-clustering',
-                });
-            } else {
-                options.push({
-                    label: semanticLocked
-                        ? `${Labels.TransformationSemanticGrouping} (Limit reached)`
-                        : Labels.TransformationSemanticGrouping,
-                    value: 'semantic-grouping',
-                    disabled: semanticLocked,
-                });
-            }
-            return options;
+            return withRecoTag([
+                { label: Labels.TransformationNone, value: 'none' },
+                { label: Labels.TransformationTextClustering, value: 'text-clustering' },
+                { label: Labels.TransformationSemanticGrouping, value: 'semantic-grouping' },
+            ]);
         }
         if (v.type === 'date') {
             return [
@@ -883,10 +959,10 @@ applyTransformationToActive(value) {
                 { label: Labels.TransformationGroupByMonth, value: 'group-by-month' },
             ];
         }
-        return [
+        return withRecoTag([
             { label: Labels.TransformationNone, value: 'none' },
             { label: Labels.TransformationReplaceMissing, value: 'replace-missing' },
-        ];
+        ]);
     }
 
     get isActiveSemanticLocked() {
@@ -1526,7 +1602,7 @@ applyTransformationToActive(value) {
     }
 
     get variantSwitchV1Class() {
-        return 'nav-variant-switch__btn nav-variant-switch__btn_active';
+        return 'nav-variant-switch__btn';
     }
 
     get variantSwitchV2Class() {
@@ -1538,11 +1614,11 @@ applyTransformationToActive(value) {
     }
 
     get variantSwitchV4Class() {
-        return 'nav-variant-switch__btn';
+        return 'nav-variant-switch__btn nav-variant-switch__btn_active';
     }
 
     get isV1AriaSelected() {
-        return 'true';
+        return 'false';
     }
 
     get isV2AriaSelected() {
@@ -1554,19 +1630,19 @@ applyTransformationToActive(value) {
     }
 
     get isV4AriaSelected() {
-        return 'false';
+        return 'true';
     }
 
     handleVariantSwitch(event) {
         const target = event.currentTarget.dataset.variant;
-        if (target === 'v1') return;
+        if (target === 'v4') return;
         const params = new URLSearchParams();
         if (this.currentStep) params.set('step', String(this.currentStep));
         if (this.shelfMode) params.set('mode', 'shelf');
         const qs = params.toString();
-        let suffix = 'builder-v2';
-        if (target === 'v3') suffix = 'builder-v3';
-        else if (target === 'v4') suffix = 'builder-v4';
+        let suffix = 'builder';
+        if (target === 'v2') suffix = 'builder-v2';
+        else if (target === 'v3') suffix = 'builder-v3';
         navigate(qs ? `/app/aim-cluster/${suffix}?${qs}` : `/app/aim-cluster/${suffix}`);
     }
 

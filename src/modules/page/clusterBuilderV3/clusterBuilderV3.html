@@ -433,18 +433,6 @@
                         <div class="prepare-toolbar-left">
                             <lightning-button label={labels.ShowOnlySelected} variant={showOnlySelectedVariant} onclick={handleToggleShowOnlySelected}></lightning-button>
                             <span class="prepare-summary">{selectedSummary}</span>
-                            <template lwc:if={isV2}>
-                                <span class={budgetDotsWrapClass} title={budgetDotsLabel}>
-                                    <lightning-icon icon-name="utility:magicwand" size="xx-small" class="semantic-budget-icon"></lightning-icon>
-                                    <span class="budget-dots-text">{budgetDotsLabel}</span>
-                                    <template for:each={semanticBudgetDots} for:item="dot">
-                                        <span key={dot.id} class={dot.dotClass}></span>
-                                    </template>
-                                </span>
-                            </template>
-                            <template lwc:else>
-                                <lightning-badge label={semanticBudgetShortText} icon-name="utility:text" variant={semanticBudgetBadgeVariant} class="sg-badge-variant"></lightning-badge>
-                            </template>
                         </div>
                         <div class="prepare-toolbar-right">
                             <lightning-input
@@ -457,33 +445,6 @@
                             ></lightning-input>
                         </div>
                     </div>
-                    <template lwc:if={isV4}>
-                        <div class="slds-scoped-notification slds-media slds-media_center auto-cluster-bar sg-scoped-notification" role="region" aria-label="Semantic grouping">
-                            <div class="slds-media__figure">
-                                <lightning-icon icon-name="utility:magicwand" size="small" alternative-text="Semantic grouping" class="auto-cluster-icon"></lightning-icon>
-                            </div>
-                            <div class="slds-media__body sg-scoped-notification__body">
-                                <div class="sg-scoped-notification__title-row">
-                                    <span class="auto-cluster-text">{v4BannerHeading}</span>
-                                    <lightning-badge label={labels.SemanticModeToggleNewPill} class="sg-scoped-notification__new"></lightning-badge>
-                                    <lightning-helptext content={v4BannerHelptext} icon-name="utility:info"></lightning-helptext>
-                                </div>
-                                <p class="sg-scoped-notification__subtext">{v4BannerBody}</p>
-                            </div>
-                            <div class="slds-media__figure slds-media__figure_reverse">
-                                <div class="auto-cluster-toggle-wrap">
-                                    <label class="slds-checkbox_toggle" aria-label={v4BannerToggleLabel}>
-                                        <input type="checkbox" checked={semanticMode} onchange={handleSemanticModeToggle} />
-                                        <span class="slds-checkbox_faux_container">
-                                            <span class="slds-checkbox_faux"></span>
-                                            <span class="slds-checkbox_on">{semanticStateLabelOn}</span>
-                                            <span class="slds-checkbox_off">{semanticStateLabelOff}</span>
-                                        </span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    </template>
                     <template lwc:if={showRecoBanner}>
                         <div class="reco-banner" role="region" aria-label="Einstein recommendations">
                             <div class="reco-banner-icon">
@@ -644,6 +605,22 @@
                                                 </span>
                                             </template>
                                         </button>
+                                    </div>
+                                </template>
+                                <template lwc:if={showRecommendationCard}>
+                                    <div class="reco-card slds-box slds-box_x-small slds-m-bottom_small" role="status">
+                                        <lightning-badge label="Recommended" icon-name="utility:einstein" icon-position="start" class="reco-card-badge slds-m-bottom_x-small"></lightning-badge>
+                                        <p class="slds-text-heading_small slds-m-bottom_xxx-small">{recommendationTitle}</p>
+                                        <p class="slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">{recommendationProfile}</p>
+                                        <p class="slds-text-body_small slds-m-bottom_x-small">{recommendationReason}</p>
+                                        <div class="slds-grid slds-grid_vertical-align-center slds-gutters_xx-small">
+                                            <div class="slds-col slds-no-flex">
+                                                <lightning-button label="Apply" variant="brand" onclick={handleApplyRecommendation}></lightning-button>
+                                            </div>
+                                            <div class="slds-col slds-no-flex">
+                                                <lightning-button label="Dismiss" variant="base" onclick={handleDismissRecommendation}></lightning-button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </template>
                                 <template lwc:if={showTransformationDropdown}>

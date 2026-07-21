@@ -103,15 +103,15 @@ const DATA_MODEL_OBJECTS = [
 ];
 
 const VARIANT_STORAGE_KEY = 'cb.variant';
-const DEFAULT_VARIANT = 'v4';
+const DEFAULT_VARIANT = 'v1';
 const LARGE_TEXT_IDS = ['v8', 'v26', 'v27'];
 
 const VARIANT_PRESETS = {
     v1: {
-        selectedVariableIds: new Set(['v8', 'v26']),
-        variableActions: { v8: 'Semantic Grouping', v26: 'Semantic Grouping' },
-        variableTransformations: { v8: 'semantic-grouping', v26: 'semantic-grouping' },
-        autoAppliedSemantic: new Set(['v8', 'v26']),
+        selectedVariableIds: new Set(),
+        variableActions: {},
+        variableTransformations: {},
+        autoAppliedSemantic: new Set(),
         pendingRecos: new Set(),
     },
     v2: {
@@ -138,7 +138,7 @@ const VARIANT_PRESETS = {
     },
 };
 
-export default class ClusterBuilder extends LightningElement {
+export default class ClusterBuilderV3 extends LightningElement {
     labels = Labels;
     @track currentStep = 1;
     @track showLeftPanel = true;
@@ -181,6 +181,7 @@ export default class ClusterBuilder extends LightningElement {
     @track shelfMode = false;
     @track semanticMode = false;
     @track semanticErrorMessage = '';
+    @track recommendationDismissed = new Set();
     _semanticErrorTimer = null;
 
     connectedCallback() {
@@ -805,6 +806,82 @@ applyTransformationToActive(value) {
         return 'none';
     }
 
+    get recommendedTransformation() {
+        const v = this.activeVariable;
+        if (!v || v.type !== 'text') return null;
+        return v.isLargeText ? 'semantic-grouping' : 'text-clustering';
+    }
+
+    get showRecommendationCard() {
+        const v = this.activeVariable;
+        if (!v || v.type !== 'text') return false;
+        if (this.recommendationDismissed.has(v.id)) return false;
+        const reco = this.recommendedTransformation;
+        return reco !== null && this.activeTransformation !== reco;
+    }
+
+    get recommendationTitle() {
+        return this.recommendedTransformation === 'semantic-grouping'
+            ? 'Semantic Grouping'
+            : 'Text Clustering';
+    }
+
+    get recommendationLabel() {
+        return this.recommendationTitle;
+    }
+
+    get recommendationProfile() {
+        const v = this.activeVariable;
+        if (!v) return '';
+        if (v.isLargeText) {
+            return v.avgChars
+                ? `Long-form text · avg ${v.avgChars.toLocaleString()} chars`
+                : 'Long-form, mostly unique text';
+        }
+        return 'Short text with repeating values';
+    }
+
+    get recommendationReason() {
+        return this.recommendedTransformation === 'semantic-grouping'
+            ? 'Groups rows by meaning — fits unique, free-form responses.'
+            : 'Groups rows by exact matches — fits recurring phrases.';
+    }
+
+    handleApplyRecommendation() {
+        const id = this.activeVariableId;
+        const reco = this.recommendedTransformation;
+        if (!id || !reco) return;
+        this.applyTransformationValue(id, reco);
+    }
+
+    handleDismissRecommendation() {
+        const id = this.activeVariableId;
+        if (!id) return;
+        const next = new Set(this.recommendationDismissed);
+        next.add(id);
+        this.recommendationDismissed = next;
+    }
+
+    applyTransformationValue(id, value) {
+        const trans = { ...this.variableTransformations };
+        const actions = { ...this.variableActions };
+        const next = new Set(this.selectedVariableIds);
+        const auto = new Set(this.autoAppliedSemantic);
+        this._clearSemanticError();
+        trans[id] = value;
+        if (value === 'text-clustering') actions[id] = Labels.TransformationTextClustering;
+        else if (value === 'semantic-grouping') actions[id] = Labels.TransformationSemanticGrouping;
+        else if (value === 'replace-missing') actions[id] = Labels.TransformationReplaceMissing;
+        else if (value === 'group-by-month') actions[id] = Labels.TransformationGroupByMonth;
+        else if (value === 'group-by-day') actions[id] = Labels.TransformationGroupByDay;
+        next.add(id);
+        if (value !== 'semantic-grouping') auto.delete(id);
+        this.variableTransformations = trans;
+        this.variableActions = actions;
+        this.selectedVariableIds = next;
+        this.autoAppliedSemantic = auto;
+    }
+
     get sampleOutcomeTransformation() {
         const t = this.activeTransformation;
         if (t && t !== 'none') return t;
@@ -857,24 +934,11 @@ applyTransformationToActive(value) {
         const v = this.activeVariable;
         if (!v) return [];
         if (v.type === 'text') {
-            const currentValue = this.activeTransformation;
-            const semanticLocked = this.semanticBudgetReached && currentValue !== 'semantic-grouping';
-            const options = [{ label: Labels.TransformationNone, value: 'none' }];
-            if (!v.isLargeText) {
-                options.push({
-                    label: Labels.TransformationTextClustering,
-                    value: 'text-clustering',
-                });
-            } else {
-                options.push({
-                    label: semanticLocked
-                        ? `${Labels.TransformationSemanticGrouping} (Limit reached)`
-                        : Labels.TransformationSemanticGrouping,
-                    value: 'semantic-grouping',
-                    disabled: semanticLocked,
-                });
-            }
-            return options;
+            return [
+                { label: Labels.TransformationNone, value: 'none' },
+                { label: Labels.TransformationTextClustering, value: 'text-clustering' },
+                { label: Labels.TransformationSemanticGrouping, value: 'semantic-grouping' },
+            ];
         }
         if (v.type === 'date') {
             return [
@@ -1526,7 +1590,7 @@ applyTransformationToActive(value) {
     }
 
     get variantSwitchV1Class() {
-        return 'nav-variant-switch__btn nav-variant-switch__btn_active';
+        return 'nav-variant-switch__btn';
     }
 
     get variantSwitchV2Class() {
@@ -1534,7 +1598,7 @@ applyTransformationToActive(value) {
     }
 
     get variantSwitchV3Class() {
-        return 'nav-variant-switch__btn';
+        return 'nav-variant-switch__btn nav-variant-switch__btn_active';
     }
 
     get variantSwitchV4Class() {
@@ -1542,7 +1606,7 @@ applyTransformationToActive(value) {
     }
 
     get isV1AriaSelected() {
-        return 'true';
+        return 'false';
     }
 
     get isV2AriaSelected() {
@@ -1550,7 +1614,7 @@ applyTransformationToActive(value) {
     }
 
     get isV3AriaSelected() {
-        return 'false';
+        return 'true';
     }
 
     get isV4AriaSelected() {
@@ -1559,13 +1623,13 @@ applyTransformationToActive(value) {
 
     handleVariantSwitch(event) {
         const target = event.currentTarget.dataset.variant;
-        if (target === 'v1') return;
+        if (target === 'v3') return;
         const params = new URLSearchParams();
         if (this.currentStep) params.set('step', String(this.currentStep));
         if (this.shelfMode) params.set('mode', 'shelf');
         const qs = params.toString();
-        let suffix = 'builder-v2';
-        if (target === 'v3') suffix = 'builder-v3';
+        let suffix = 'builder';
+        if (target === 'v2') suffix = 'builder-v2';
         else if (target === 'v4') suffix = 'builder-v4';
         navigate(qs ? `/app/aim-cluster/${suffix}?${qs}` : `/app/aim-cluster/${suffix}`);
     }
