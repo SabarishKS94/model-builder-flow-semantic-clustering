@@ -681,7 +681,6 @@ applyTransformationToActive(value) {
                 v4LockedReason = Labels.SemanticLockedShort;
                 v4LockedTooltip = Labels.SemanticLockedHint;
             }
-            const showLargeTextInfo = !!v.isLargeText && !this.isV4;
             return {
                 ...v,
                 isSelected,
@@ -689,7 +688,6 @@ applyTransformationToActive(value) {
                 actionLabel: action,
                 actionVariant: isAuto ? 'brand-outline' : 'neutral',
                 iconName,
-                showLargeTextInfo,
                 rowClass: `${isSelected ? 'var-row var-row_selected' : 'var-row'}${v4Locked ? ' var-row_locked' : ''}`,
                 showDelete: v.type !== 'date' && !v4Locked,
                 showRecoBadge: isRecoPending,
