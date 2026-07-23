@@ -12,6 +12,8 @@
     "build:soma-pages": "node scripts/prebuild-icons.mjs && vite build --mode soma-pages",
     "deploy": "npm run build:gh-pages && gh-pages -d dist --nojekyll",
     "deploy:soma": "npm run build:soma-pages && gh-pages -d dist --nojekyll --repo git@git.soma.salesforce.com:sabarish-ks/model-builder-flow-semantic-clustering.git",
+    "freeze:gh": "node scripts/freeze-version.mjs --target=gh",
+    "freeze:soma": "node scripts/freeze-version.mjs --target=soma",
     "preview": "vite preview",
     "dev:native-shadow": "echo 'To use native shadow, set disableSyntheticShadowSupport: true in vite.config.js'",
     "lint:boundaries": "node scripts/lint-import-boundaries.mjs",
