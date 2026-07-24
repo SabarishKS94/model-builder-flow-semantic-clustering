@@ -70,8 +70,10 @@ function run(cmd, cmdArgs, env = {}) {
 
 console.log(`\n▸ Freezing ${version} for target=${target} → ${destDir}/\n`);
 
-// Build with a relative base so the bundle works from any subpath.
-await run('npx', ['vite', 'build', '--base=./']);
+// Build with a relative base so the bundle works from any subpath,
+// and with the target's mode so its .env.{mode} (VITE_ROUTER_MODE=hash) is loaded.
+const buildMode = target === 'gh' ? 'gh-pages' : 'soma-pages';
+await run('npx', ['vite', 'build', '--base=./', '--mode', buildMode]);
 
 // Publish the built dist into the versioned subdirectory on the pages branch.
 // --add keeps existing files (i.e. the current root deploy and other versions).
